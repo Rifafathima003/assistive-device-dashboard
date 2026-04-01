@@ -143,13 +143,11 @@ col1, col2 = st.columns(2)
 with col1:
     st.markdown("### 🔧 Device Distribution")
 
-    device_counts = (
-        filtered_df['Device']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Device', 'Device': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    device_counts =filtered_df['Device'].value_counts().reset_index()
+    device_counts.columns = ['Device', 'Count']
+
+    device_counts=device_counts.sort_values(by='Count', ascending=False)
+    
 
     fig = px.bar(
         device_counts,
@@ -158,21 +156,16 @@ with col1:
         color='Count',
         color_continuous_scale='Greens'
     )
-
-    fig.update_layout(xaxis_title="", yaxis_title="Count")
     st.plotly_chart(fig, use_container_width=True)
 
 # 🧩 DEVICE CATEGORY (PURPLE)
 with col2:
     st.markdown("### 🧩 Device Category Distribution")
 
-    category_counts = (
-        filtered_df['Device Category']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Category', 'Device Category': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    category_counts = filtered_df['Device Category'].value_counts().reset_index()
+    category_counts.columns = ['Category', 'Count']
+
+    category_counts=category_counts.sort_values(by='Count', ascending=False)    
 
     fig = px.bar(
         category_counts,
@@ -181,8 +174,6 @@ with col2:
         color='Count',
         color_continuous_scale='Purples'
     )
-
-    fig.update_layout(xaxis_title="", yaxis_title="Count")
     st.plotly_chart(fig, use_container_width=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -194,13 +185,10 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("### ⚡ Device Priority Distribution")
 
-    priority_counts = (
-        filtered_df['Priority']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Priority', 'Priority': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    priority_counts =filtered_df['Priority'].value_counts().reset_index()
+    priority_counts.columns = ['Priority', 'Count']
+
+    priority_counts=priority_counts.sort_values(by='Count', ascending=False)
 
     fig = px.bar(
         priority_counts,
@@ -209,21 +197,16 @@ with col3:
         color='Count',
         color_continuous_scale='Oranges'
     )
-
-    fig.update_layout(xaxis_title="", yaxis_title="Count")
     st.plotly_chart(fig, use_container_width=True)
 
 # ♿ DISABILITY (BLUE)
 with col4:
     st.markdown("### ♿ Disability Distribution")
 
-    disability_counts = (
-        filtered_df['disability_cleaned']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Disability', 'disability_cleaned': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    disability_counts =filtered_df['disability_cleaned'].value_counts().reset_index()
+    disability_counts.columns = ['Disability', 'Count']
+
+    disability_counts=disability_counts.sort_values(by='Count', ascending=False)
 
     fig = px.bar(
         disability_counts,
@@ -232,8 +215,6 @@ with col4:
         color='Count',
         color_continuous_scale='Blues'
     )
-
-    fig.update_layout(xaxis_title="", yaxis_title="Count")
     st.plotly_chart(fig, use_container_width=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -245,13 +226,10 @@ col5, col6 = st.columns(2)
 with col5:
     st.markdown("### 👥 Social Category Distribution")
 
-    social_counts = (
-        filtered_df['Social Category']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Category', 'Social Category': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    social_counts =filtered_df['Social Category'].value_counts().reset_index()
+    social_counts.columns = ['Category', 'Count']
+
+    social_counts=social_counts.sort_values(by='Count', ascending=False)
 
     fig = px.bar(
         social_counts,
@@ -261,20 +239,14 @@ with col5:
         color_continuous_scale='Magma'
     )
 
-    fig.update_layout(xaxis_title="", yaxis_title="Count")
     st.plotly_chart(fig, use_container_width=True)
 
 # 🚻 GENDER (CUSTOM COLORS)
 with col6:
     st.markdown("### 🚻 Gender Distribution")
 
-    gender_counts = (
-        filtered_df['Gender']
-        .value_counts()
-        .reset_index()
-        .rename(columns={'index': 'Gender', 'Gender': 'Count'})
-        .sort_values(by='Count', ascending=False)
-    )
+    gender_counts =filtered_df['Gender'].value_counts().reset_index()
+    gender_counts.columns = ['Gender', 'Count']
 
     fig = px.pie(
         gender_counts,
