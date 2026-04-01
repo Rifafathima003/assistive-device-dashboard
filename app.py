@@ -19,20 +19,6 @@ df=load_data_streamlit()
 st.title("📊 Assistive Device Needs Dashboard")
 
 st.markdown("Comprehensive view of device requirements across schools and districts")
-st.markdown("---")
-st.divider()
-
-# ---------------- GLOBAL METRICS ----------------
-st.markdown(""" <style>.kpi-card {background-color: #1E1E2E; border-radius: 12px; padding: 20px; text-align: center; color: white;}</style> """, unsafe_allow_html=True)
-col1, col2, col3 = st.columns(3)
- 
-with col1:
-    st.markdown(f"<div class='kpi-card'><h3>Total Devices</h3><h1>{len(df)}</h1></div>", unsafe_allow_html=True)
-with col2:
-    st.markdown(f"<div class='kpi-card'><h3>Total Schools</h3><h1>{df['School_Name'].nunique()}</h1></div>", unsafe_allow_html=True)    
-with col3:
-    st.markdown(f"<div class='kpi-card'><h3>Total Districts</h3><h1>{df['District'].nunique()}</h1></div>", unsafe_allow_html=True)
-
 st.divider()
 
 # ---------------- SIDEBAR FILTERS ----------------
@@ -122,15 +108,21 @@ filtered_df = df[
 if selected_priorities is not None:
     filtered_df = filtered_df[filtered_df['Priority'].isin(selected_priorities)]
 
-# ---------------- TOTAL DEVICE COUNT ----------------
-st.markdown("##📦 Total Device Requirement")
+# ---------------- GLOBAL METRICS ----------------
+st.markdown(""" <style>.kpi-card {background-color: #1E1E2E; border-radius: 12px; padding: 20px; text-align: center; color: white;}</style> """, unsafe_allow_html=True)
+col1, col2, col3, col4 = st.columns(4)
+ 
+with col1:
+    st.markdown(f"<div class='kpi-card'><h3>Total Devices</h3><h1>{len(filtered_df)}</h1></div>", unsafe_allow_html=True)
+with col2:
+    st.markdown(f"<div class='kpi-card'><h3>Total Schools</h3><h1>{filtered_df['School_Name'].nunique()}</h1></div>", unsafe_allow_html=True)    
+with col3:
+    st.markdown(f"<div class='kpi-card'><h3>Total Districts</h3><h1>{filtered_df['District'].nunique()}</h1></div>", unsafe_allow_html=True)
+most_device = filtered_df['Device'].value_counts().idxmax() if not filtered_df.empty else "N/A"
+with col4:
+    st.markdown(f"<div class='kpi-card'><h3>Most Needed Device</h3><h1>{most_device}</h1></div>", unsafe_allow_html=True)
 
-col1, col2 = st.columns(2)
-
-col1.metric("Devices per District", round(len(filtered_df)/ filtered_df['District'].nunique(), 1))
-col2.metric("Devices per School", round(len(filtered_df)/ filtered_df['School_Name'].nunique(), 1))
-col3.metric("Most Needed Device", filtered_df['Device'].value_counts().idxmax())
-
+st.divider()
 import plotly.express as px
 # ==================== DISTRIBUTION ANALYSIS ====================
 st.markdown("## 📊 Distribution Analysis")
