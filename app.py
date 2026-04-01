@@ -27,11 +27,11 @@ st.markdown(""" <style>.kpi-card {background-color: #1E1E2E; border-radius: 12px
 col1, col2, col3 = st.columns(3)
  
 with col1:
-    st.markdown(f"<div class="kpi-card"><h3>Total Devices</h3><h1>{len(df)}</h1></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='kpi-card'><h3>Total Devices</h3><h1>{len(df)}</h1></div>", unsafe_allow_html=True)
 with col2:
-    st.markdown(f"<div class="kpi-card"><h3>Total Schools</h3><h1>{df['School_Name'].nunique()}</h1></div>", unsafe_allow_html=True)    
+    st.markdown(f"<div class='kpi-card'><h3>Total Schools</h3><h1>{df['School_Name'].nunique()}</h1></div>", unsafe_allow_html=True)    
 with col3:
-    st.markdown(f"<div class="kpi-card"><h3>Total Districts</h3><h1>{df['District'].nunique()}</h1></div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='kpi-card'><h3>Total Districts</h3><h1>{df['District'].nunique()}</h1></div>", unsafe_allow_html=True)
 
 st.divider()
 
