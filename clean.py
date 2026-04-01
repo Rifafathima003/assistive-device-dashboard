@@ -63,7 +63,6 @@ def load_and_clean_data(path= None):
 
     
     # ---------------- CLEAN DISABILITY (NOT USED IN DASHBOARD) ----------------
-    from fuzzywuzzy import process
     disability_col = [col for col in df.columns if "primary disability" in col.lower()][0]
 
     def clean_disability(text):

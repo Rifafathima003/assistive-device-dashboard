@@ -3,10 +3,9 @@
 import streamlit as st
 import pandas as pd
 from clean import load_and_clean_data
-df=load_and_clean_data()
 # ---------------- LOAD DATA ----------------
 
-@st.cache_data
+@st.cache_data(ttl=120)
 def load_data_streamlit():
     return load_and_clean_data()        
 df=load_data_streamlit()
