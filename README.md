@@ -1,23 +1,83 @@
+# Assistive Device Needs Dashboard
 
-# Assistive Device Dashboard
+Streamlit dashboard for reviewing assistive device requests across schools, districts, learner profiles, and catalog size requirements.
 
-[![Open Dashboard](https://img.sheilds.io/badge/Streamlit-live_App-green?style=for-the-badge&logo=streamlit)](https://assistive-device-dashboard-rxxvsrfpa6smbzkhzuedqg.streamlit.app/)
+## Current Setup
 
+- App: `app.py`
+- Data cleaning: `clean.py`
+- Cleaned output: `data/cleaned_data.csv`
+- Device catalog: `C:\Users\hp\Downloads\DEVICE_INFORMATION_CATALOG_FINAL.xlsx`
+- Streamlit theme: `.streamlit/config.toml`
 
-This project analyzes assistive device requirements across schools using:
+The dashboard loads response data from the published Google Sheet in `clean.py`, cleans and reshapes the three device-priority columns into request-level rows, and saves the cleaned dataset to `data/cleaned_data.csv`.
 
-- Streamlit (Interactive Dashboard)
-- Power BI (Visualization)
-- Google Forms (Data Collection)
+## Dashboard Sections
 
-## Features
-- Live data from Google Sheets
-- Device classification (Small, Medium, Large)
-- District and school filtering
-- Most needed device analysis
+- `Demand overview`: district, device, priority, and category demand.
+- `Learner profile`: disability, social category, gender, and measurement-based device demand.
+- `Size chart`: catalog size-code demand by device.
+- `Filtered data`: current filtered records and CSV download.
+
+## Sizing Logic
+
+The cleaned data does not classify devices into small, medium, and large.
+
+Palm length and width are retained only for:
+
+- `utensil holder`
+- `palm pen holder`
+- `toothbrush holder`
+
+Those three devices are mapped to the catalog `ND` sizing chart using cleaned palm length and width.
+
+All other devices are treated as fixed-measurement items. The size chart uses the catalog device code where a fixed or representative code is available.
+
+## Filters
+
+The sidebar uses collapsed slicers for:
+
+- Districts
+- Schools
+- Device categories
+- Devices
+- Priorities
+- Genders
+- Ranked rows
+
+Schools remain dependent on the selected districts.
+
+## Refresh
+
+The dashboard refreshes every hour. Cached data also uses a one-hour TTL.
 
 ## Run Locally
 
 ```bash
 pip install -r requirements.txt
 streamlit run app.py
+```
+
+The app is typically served at:
+
+```text
+http://localhost:8501
+```
+
+If another Streamlit app is already using port `8501`, run with another port:
+
+```bash
+streamlit run app.py --server.port 8502
+```
+
+## Requirements
+
+Key packages:
+
+- `streamlit`
+- `pandas`
+- `plotly`
+- `streamlit-autorefresh`
+- `openpyxl`
+
+`openpyxl` is required for reading the Excel device catalog.

@@ -31,26 +31,9 @@ def load_and_clean_data(path= None):
     df['Palm Width'] = pd.to_numeric(df['Palm Width'], errors='coerce')
     df['Palm Length'] = pd.to_numeric(df['Palm Length'], errors='coerce')
 
-    # fill missing values with median
-    df['Palm Width'] = df['Palm Width'].fillna(df['Palm Width'].median())
-    df['Palm Length'] = df['Palm Length'].fillna(df['Palm Length'].median())
-
     # Clip values into valid range
     df['Palm Width Cleaned'] = df['Palm Width'].clip(lower=2, upper=3)
     df['Palm Length Cleaned'] = df['Palm Length'].clip(lower=6, upper=10)
-
-    #Classifying size based on measurements
-    def classify_size(row):
-        Width = row['Palm Width Cleaned']
-        Length = row['Palm Length Cleaned']
-
-        if Width < 2.2 and Length < 8:
-            return "Small"
-        elif Width > 2.5 and Width < 2.8 and Length > 8 and Length < 9:
-            return "Medium"
-        else:
-            return "Large"
-    df['Device Size'] = df.apply(classify_size, axis=1)
 
     #cleaning district names and standardizing them
     df['District'] = df['District'].astype(str).str.strip().str.title()
@@ -122,7 +105,6 @@ def load_and_clean_data(path= None):
             'disability_cleaned',
             'Palm Width Cleaned',
             'Palm Length Cleaned',
-            'Device Size'  
         ],
         value_vars=device_cols,
         var_name="Priority",
@@ -143,6 +125,14 @@ def load_and_clean_data(path= None):
     }
 
     df_devices['Device'] = df_devices['Device'].replace(device_map)
+
+    measurement_based_devices = {
+        'utensil holder',
+        'palm pen holder',
+        'toothbrush holder',
+    }
+    fixed_measurement_mask = ~df_devices['Device'].isin(measurement_based_devices)
+    df_devices.loc[fixed_measurement_mask, ['Palm Width Cleaned', 'Palm Length Cleaned']] = pd.NA
 
     
     device_category_map = {
