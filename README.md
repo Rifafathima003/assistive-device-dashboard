@@ -57,25 +57,6 @@ Schools remain dependent on the selected districts.
 
 The dashboard refreshes every hour. Cached data also uses a one-hour TTL.
 
-## Run Locally
-
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-The app is typically served at:
-
-```text
-http://localhost:8501
-```
-
-If another Streamlit app is already using port `8501`, run with another port:
-
-```bash
-streamlit run app.py --server.port 8502
-```
-
 ## Requirements
 
 Key packages:
