@@ -2,6 +2,10 @@
 
 Streamlit dashboard for reviewing assistive device requests across schools, districts, learner profiles, and catalog size requirements.
 
+## 🚀 Live Dashboard
+
+[![Open Dashboard](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit&style=for-the-badge)](https://assistive-device-dashboard-r2syjajgp3broag4y2zea3.streamlit.app/)
+
 ## Current Setup
 
 - App: `app.py`
@@ -58,18 +62,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-The app is typically served at:
-
-```text
-http://localhost:8501
-```
-
-If another Streamlit app is already using port `8501`, run with another port:
-
-```bash
-streamlit run app.py --server.port 8502
-```
-
 ## Requirements
 
 Key packages:
@@ -82,12 +74,3 @@ Key packages:
 
 `openpyxl` is required for reading the Excel device catalog.
 
-## Deployment Note
-
-The device catalog must stay inside the repository at:
-
-```text
-data/DEVICE_INFORMATION_CATALOG_FINAL.xlsx
-```
-
-The app uses that repo-relative file first, so deployments on Streamlit Cloud or similar platforms can access the catalog without depending on a local Windows path.
