@@ -19,7 +19,13 @@ st.set_page_config(
 
 REFRESH_INTERVAL_MS = 3600000
 DATA_CACHE_TTL_SECONDS = 3600
-CATALOG_PATH = Path(r"C:\Users\hp\Downloads\DEVICE_INFORMATION_CATALOG_FINAL.xlsx")
+PROJECT_DIR = Path(__file__).resolve().parent
+CDC_PATH = PROJECT_DIR / "data" / "CDC.txt"
+CATALOG_PATHS = [
+    PROJECT_DIR / "data" / "DEVICE_INFORMATION_CATALOG_FINAL.xlsx",
+    Path(r"C:\Users\hp\Downloads\DEVICE_INFORMATION_CATALOG_FINAL.xlsx"),
+]
+CATALOG_PATH = next((path for path in CATALOG_PATHS if path.exists()), CATALOG_PATHS[0])
 
 COLORS = {
     "ink": "#0f172a",
@@ -51,6 +57,37 @@ PRIORITY_COLORS = {
 CATEGORY_COLORS = {
     "Assistive": COLORS["blue"],
     "Cognitive": COLORS["cyan"],
+}
+DEVICE_CATEGORY_MAP = {
+    "wheelchair": "Mobility",
+    "crutches": "Mobility",
+    "walking aid": "Mobility",
+    "prosthetic limb": "Mobility",
+    "orthotic device": "Mobility",
+    "visual aid": "Assistive",
+    "button aid": "Assistive",
+    "braille": "Assistive",
+    "hearing aid": "Assistive",
+    "reading bar": "Assistive",
+    "palm pen holder": "Assistive",
+    "utensil holder": "Assistive",
+    "toothbrush holder": "Assistive",
+    "adaptive pencil grip": "Assistive",
+    "braille kit": "Assistive",
+    "communication device": "Cognitive",
+    "maze": "Cognitive",
+    "tetris": "Cognitive",
+    "low profile switch": "Assistive",
+    "communication board": "Cognitive",
+    "speech device": "Cognitive",
+}
+DEVICE_NAME_MAP = {
+    "wheel chair": "wheelchair",
+    "wheel-chair": "wheelchair",
+    "hearing aid device": "hearing aid",
+    "hearing machine": "hearing aid",
+    "walking stick": "walking aid",
+    "walker": "walking aid",
 }
 
 
@@ -219,6 +256,14 @@ st.markdown(
         div[data-baseweb="select"] > div {{
             background: #ffffff;
             border-color: #bfdbfe;
+        }}
+
+        div[data-baseweb="select"] span,
+        div[data-baseweb="select"] input,
+        div[data-baseweb="select"] div[role="button"] {{
+            color: {COLORS["ink"]} !important;
+            -webkit-text-fill-color: {COLORS["ink"]} !important;
+            opacity: 1 !important;
         }}
 
         [data-testid="stMetric"] {{
@@ -510,6 +555,45 @@ def value_counts_frame(df, source_col, label_col, limit=None):
     return counts
 
 
+def normalize_device_name(value):
+    device = clean_text(value, "").strip().lower()
+    return DEVICE_NAME_MAP.get(device, device)
+
+
+def display_device_name(value):
+    return clean_text(value, "").replace("cdc", "CDC").title()
+
+
+@st.cache_data(ttl=DATA_CACHE_TTL_SECONDS)
+def load_cdc_data(cdc_path):
+    path = Path(cdc_path)
+    if not path.exists():
+        return pd.DataFrame(columns=["Institute", "District", "Device", "Device Category", "Requests", "Source"])
+
+    records = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.lower() == "cdc" or line.lower().startswith("total count"):
+            continue
+        match = re.match(r"^(.*?)\s*-\s*(\d+)\s*$", line)
+        if not match:
+            continue
+        device = normalize_device_name(match.group(1))
+        requests = int(match.group(2))
+        records.append(
+            {
+                "Institute": "CDC",
+                "District": "Trivandrum",
+                "Device": device,
+                "Device Category": DEVICE_CATEGORY_MAP.get(device, "Other"),
+                "Requests": requests,
+                "Source": "Institute",
+            }
+        )
+
+    return pd.DataFrame(records)
+
+
 def style_chart(fig, height=380, show_colorbar=False):
     fig.update_layout(
         template="plotly_white",
@@ -682,7 +766,7 @@ def fixed_catalog_info(catalog, item_name):
     }
 
 
-def assign_catalog_size(row, catalog):
+def assign_catalog_size(row, catalog, device_measurements=None):
     item_lookup = catalog.get("item_lookup", {})
     cleaned_device = clean_text(row.get("Device"), "")
     item_name = item_lookup.get(normalize_key(cleaned_device), cleaned_device.title())
@@ -691,6 +775,13 @@ def assign_catalog_size(row, catalog):
     width = pd.to_numeric(row.get("Palm Width Cleaned"), errors="coerce")
     length = None if pd.isna(length) else float(length)
     width = None if pd.isna(width) else float(width)
+    measurement_fill = (device_measurements or {}).get(cleaned_device, {})
+    if length is None:
+        fill_length = measurement_fill.get("Palm Length Cleaned")
+        length = None if pd.isna(fill_length) else float(fill_length)
+    if width is None:
+        fill_width = measurement_fill.get("Palm Width Cleaned")
+        width = None if pd.isna(fill_width) else float(fill_width)
 
     if item_key in {"utensilholder", "palmpenholder", "toothbrushadapter"}:
         size_system = "Palm length and width"
@@ -752,7 +843,17 @@ def build_size_chart_data(filtered_data, catalog):
     if filtered_data.empty or not catalog:
         return pd.DataFrame()
 
-    rows = [assign_catalog_size(row, catalog) for _, row in filtered_data.iterrows()]
+    device_measurements = (
+        filtered_data[filtered_data["Device"].isin(["utensil holder", "palm pen holder", "toothbrush holder"])]
+        .groupby("Device")[["Palm Length Cleaned", "Palm Width Cleaned"]]
+        .median()
+        .to_dict("index")
+    )
+
+    rows = [
+        assign_catalog_size(row, catalog, device_measurements)
+        for _, row in filtered_data.iterrows()
+    ]
     assigned = pd.DataFrame(rows)
     group_cols = [
         "Device",
@@ -801,6 +902,13 @@ def render_slicer(title, options, key, placeholder=None):
 
 df = load_data_streamlit()
 catalog = load_device_catalog(str(CATALOG_PATH))
+cdc_df = load_cdc_data(str(CDC_PATH))
+
+if "kpi_basis" not in st.session_state:
+    st.session_state["kpi_basis"] = "Auto"
+if "kpi_institute" not in st.session_state:
+    institute_defaults = sorted(cdc_df["Institute"].dropna().unique()) if not cdc_df.empty else []
+    st.session_state["kpi_institute"] = institute_defaults[0] if institute_defaults else None
 
 st.sidebar.markdown(
     """
@@ -837,6 +945,13 @@ selected_categories = render_slicer(
 devices = sorted(df["Device"].dropna().unique())
 selected_devices = render_slicer("Devices", devices, "devices_filter", "Choose devices")
 
+institutes = sorted(cdc_df["Institute"].dropna().unique()) if not cdc_df.empty else []
+selected_institutes = (
+    render_slicer("Institutes", institutes, "institutes_filter", "Choose institutes")
+    if institutes
+    else []
+)
+
 priorities = sorted(df["Priority"].dropna().unique())
 selected_priorities = render_slicer("Priorities", priorities, "priorities_filter", "Choose priorities")
 
@@ -845,6 +960,21 @@ selected_genders = render_slicer("Genders", genders, "genders_filter", "Choose g
 
 with st.sidebar.expander("Ranked rows", expanded=False):
     top_n = st.slider("Rows per chart", min_value=5, max_value=20, value=10, step=1)
+
+with st.sidebar.expander("KPI view", expanded=False):
+    kpi_basis = st.selectbox(
+        "Basis",
+        options=["Auto", "Schools", "Institutes"],
+        key="kpi_basis",
+        label_visibility="collapsed",
+    )
+    if institutes:
+        st.selectbox(
+            "Institute",
+            options=institutes,
+            key="kpi_institute",
+            label_visibility="collapsed",
+        )
 
 filtered_df = df[
     (df["District"].isin(selected_districts))
@@ -856,40 +986,82 @@ filtered_df = df[
 ].copy()
 size_chart_df = build_size_chart_data(filtered_df, catalog)
 
-total_requests = len(filtered_df)
+cdc_filtered = cdc_df[
+    (cdc_df["District"].isin(selected_districts))
+    & (cdc_df["Device Category"].isin(selected_categories))
+    & (cdc_df["Device"].isin(selected_devices))
+    & (cdc_df["Institute"].isin(selected_institutes if selected_institutes else institutes))
+].copy()
+
+school_requests = len(filtered_df)
+cdc_requests = int(cdc_filtered["Requests"].sum()) if not cdc_filtered.empty else 0
+
+school_device_counts = filtered_df["Device"].value_counts() if not filtered_df.empty else pd.Series(dtype="int64")
+cdc_device_counts = cdc_filtered.groupby("Device")["Requests"].sum() if not cdc_filtered.empty else pd.Series(dtype="int64")
+combined_device_counts = school_device_counts.add(cdc_device_counts, fill_value=0).sort_values(ascending=False)
+selected_institute_name = st.session_state.get("kpi_institute")
+institute_kpi_df = cdc_filtered[
+    cdc_filtered["Institute"].eq(selected_institute_name)
+] if selected_institute_name else cdc_filtered
+institute_requests = int(institute_kpi_df["Requests"].sum()) if not institute_kpi_df.empty else 0
+institute_device_counts = (
+    institute_kpi_df.groupby("Device")["Requests"].sum().sort_values(ascending=False)
+    if not institute_kpi_df.empty
+    else pd.Series(dtype="int64")
+)
+institute_count = int(institute_kpi_df["Institute"].nunique()) if not institute_kpi_df.empty else 0
+institute_districts = int(institute_kpi_df["District"].nunique()) if not institute_kpi_df.empty else 0
+
 total_schools = filtered_df["School_Name"].nunique()
 total_districts = filtered_df["District"].nunique()
 priority_numeric = pd.to_numeric(filtered_df["Priority"], errors="coerce")
-priority_one = int((priority_numeric == 1).sum()) if total_requests else 0
-top_device = (
-    filtered_df["Device"].value_counts().idxmax()
-    if total_requests and not filtered_df["Device"].dropna().empty
-    else "No data"
-)
+priority_one = int((priority_numeric == 1).sum()) if school_requests else 0
+school_filter_active = bool(schools) and set(selected_schools) != set(schools)
+
+if kpi_basis == "Institutes":
+    total_requests = institute_requests
+    top_device = display_device_name(institute_device_counts.idxmax()) if not institute_device_counts.empty else "No data"
+elif kpi_basis == "Schools":
+    total_requests = school_requests
+    top_device = (
+        display_device_name(school_device_counts.idxmax())
+        if not school_device_counts.empty
+        else "No data"
+    )
+else:
+    total_requests = school_requests if school_filter_active else school_requests + cdc_requests
+    active_device_counts = school_device_counts if school_filter_active else combined_device_counts
+    top_device = display_device_name(active_device_counts.idxmax()) if not active_device_counts.empty else "No data"
+
 top_district = (
     filtered_df["District"].value_counts().idxmax()
-    if total_requests and not filtered_df["District"].dropna().empty
+    if school_requests and not filtered_df["District"].dropna().empty
     else "No data"
 )
 latest_refresh = datetime.now().strftime("%d %b %Y, %I:%M %p")
+status_scope_pill = (
+    f'<span class="status-pill">{fmt_number(institute_count)} institutes</span>'
+    if kpi_basis == "Institutes"
+    else f'<span class="status-pill">{fmt_number(total_schools)} schools</span>'
+)
 
 st.markdown(
     f"""
-    <div class="app-hero">
-        <div class="eyebrow">Assistive device dashboard</div>
-        <h1 class="hero-title">Device needs across schools and districts</h1>
-        <div class="status-row">
-            <span class="status-pill">Refresh: hourly</span>
-            <span class="status-pill">Updated {safe_html(latest_refresh)}</span>
-            <span class="status-pill">{fmt_number(total_requests)} requests</span>
-            <span class="status-pill">{fmt_number(total_schools)} schools</span>
+        <div class="app-hero">
+            <div class="eyebrow">Assistive device dashboard</div>
+            <h1 class="hero-title">Assistive Device Demand Dashboard</h1>
+            <div class="status-row">
+                <span class="status-pill">Refresh: hourly</span>
+                <span class="status-pill">Updated {safe_html(latest_refresh)}</span>
+                <span class="status-pill">{fmt_number(total_requests)} total requests</span>
+                {status_scope_pill}
+            </div>
         </div>
-    </div>
     """,
     unsafe_allow_html=True,
 )
 
-if filtered_df.empty:
+if filtered_df.empty and cdc_filtered.empty:
     st.markdown(
         """
         <div class="empty-state">
@@ -902,17 +1074,46 @@ if filtered_df.empty:
 
 metric_1, metric_2, metric_3, metric_4 = st.columns(4)
 with metric_1:
-    render_metric("Device requests", fmt_number(total_requests), "Selected records")
+    if kpi_basis == "Institutes":
+        render_metric(
+            "Device requests",
+            fmt_number(total_requests),
+            f"{selected_institute_name or 'Selected institute'} requests",
+        )
+    elif kpi_basis == "Schools":
+        render_metric("Device requests", fmt_number(total_requests), "Selected school records")
+    else:
+        device_note = (
+            "Selected school records"
+            if school_filter_active
+            else f"{fmt_number(school_requests)} school requests + {fmt_number(cdc_requests)} institute requests"
+        )
+        render_metric("Device requests", fmt_number(total_requests), device_note)
 with metric_2:
-    render_metric("Schools covered", fmt_number(total_schools), f"{fmt_number(total_districts)} districts")
+    if kpi_basis == "Institutes":
+        render_metric("Institutes covered", fmt_number(institute_count), f"{fmt_number(institute_districts)} districts")
+    else:
+        render_metric("Schools covered", fmt_number(total_schools), f"{fmt_number(total_districts)} districts")
 with metric_3:
-    render_metric(
-        "Priority 1 needs",
-        fmt_number(priority_one),
-        f"{fmt_percent(priority_one, total_requests)} of selected requests.",
-    )
+    if kpi_basis == "Institutes":
+        render_metric("Institute districts", fmt_number(institute_districts), "Filtered institute locations")
+    else:
+        render_metric(
+            "Priority 1 needs",
+            fmt_number(priority_one),
+            f"{fmt_percent(priority_one, school_requests)} of school requests.",
+        )
 with metric_4:
-    render_metric("Most requested device", top_device, "Top item")
+    if kpi_basis == "Institutes":
+        render_metric("Most needed device", top_device, safe_html(selected_institute_name or "Institute view"))
+    elif kpi_basis == "Schools":
+        render_metric("Most needed device", top_device, "School demand")
+    else:
+        render_metric(
+            "Most needed device",
+            top_device,
+            "School demand" if school_filter_active else "Combined school and institute demand",
+        )
 
 st.markdown('<div class="section-title">Executive focus</div>', unsafe_allow_html=True)
 
@@ -944,8 +1145,8 @@ with focus_3:
         f"Female share: {fmt_percent(female_count, total_requests)}.",
     )
 
-overview_tab, profile_tab, size_tab, data_tab = st.tabs(
-    ["Demand overview", "Learner profile", "Size chart", "Filtered data"]
+overview_tab, institutes_tab, profile_tab, size_tab, data_tab = st.tabs(
+    ["Demand overview", "Institutes", "Learner profile", "Size chart", "Filtered data"]
 )
 
 with overview_tab:
@@ -1003,6 +1204,55 @@ with overview_tab:
             hovertemplate="%{label}<br>%{value:,} requests<extra></extra>",
         )
         st.plotly_chart(style_chart(fig, height=350), width="stretch")
+
+with institutes_tab:
+    st.markdown('<div class="section-title">Institutes</div>', unsafe_allow_html=True)
+
+    if cdc_filtered.empty:
+        st.markdown(
+            """
+            <div class="empty-state">
+                No institute records match the current district, category, or device filters.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        institute_count = cdc_filtered["Institute"].nunique()
+        institute_requests = int(cdc_filtered["Requests"].sum())
+        institute_top_device = display_device_name(
+            cdc_filtered.sort_values("Requests", ascending=False).iloc[0]["Device"]
+        )
+
+        ins_1, ins_2, ins_3 = st.columns(3)
+        with ins_1:
+            render_insight("Institutes", fmt_number(institute_count), "Included in this view")
+        with ins_2:
+            render_insight("District", "Trivandrum", "Institute location")
+        with ins_3:
+            render_insight("Device requests", fmt_number(institute_requests), f"Top device: {institute_top_device}")
+
+        institute_device_counts = cdc_filtered.sort_values("Requests", ascending=False).copy()
+        institute_device_counts["Device"] = institute_device_counts["Device"].map(display_device_name)
+
+        left, right = st.columns([1.15, 0.85])
+        with left:
+            st.markdown("#### Institute device demand")
+            chart_height = max(320, min(620, 120 + (len(institute_device_counts) * 34)))
+            st.plotly_chart(
+                make_horizontal_bar(institute_device_counts, "Requests", "Device", height=chart_height),
+                width="stretch",
+            )
+
+        with right:
+            st.markdown("#### Institute reference")
+            st.dataframe(
+                cdc_filtered[["Institute", "District", "Device", "Device Category", "Requests"]]
+                .assign(Device=lambda frame: frame["Device"].map(display_device_name))
+                .sort_values("Requests", ascending=False),
+                hide_index=True,
+                width="stretch",
+            )
 
 with profile_tab:
     st.markdown('<div class="section-title">Learner profile</div>', unsafe_allow_html=True)

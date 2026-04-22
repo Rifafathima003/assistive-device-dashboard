@@ -1,5 +1,3 @@
-from pydoc import text
-
 import pandas as pd
 
 def load_and_clean_data(path= None):
@@ -31,9 +29,9 @@ def load_and_clean_data(path= None):
     df['Palm Width'] = pd.to_numeric(df['Palm Width'], errors='coerce')
     df['Palm Length'] = pd.to_numeric(df['Palm Length'], errors='coerce')
 
-    # Clip values into valid range
-    df['Palm Width Cleaned'] = df['Palm Width'].clip(lower=2, upper=3)
-    df['Palm Length Cleaned'] = df['Palm Length'].clip(lower=6, upper=10)
+    # Keep measurements within plausible human-hand ranges while preserving true sub-2 cm widths.
+    df['Palm Width Cleaned'] = df['Palm Width'].where(df['Palm Width'].between(1.0, 5.0)).round(2)
+    df['Palm Length Cleaned'] = df['Palm Length'].where(df['Palm Length'].between(4.0, 15.0)).round(2)
 
     #cleaning district names and standardizing them
     df['District'] = df['District'].astype(str).str.strip().str.title()
@@ -164,7 +162,10 @@ def load_and_clean_data(path= None):
     df_devices['Device Category'] = df_devices['Device'].map(device_category_map)
 
     # ---------------- SAVE CLEANED FILE ----------------
-    df_devices.to_csv("data/cleaned_data.csv", index=False)
+    try:
+        df_devices.to_csv("data/cleaned_data.csv", index=False)
+    except PermissionError:
+        pass
 
     return df_devices
 # ---------------- RUN FILE ----------------
