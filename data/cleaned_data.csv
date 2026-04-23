@@ -498,7 +498,7 @@ Malappuram,Mss Kanivu Special School Farook College,KKDS10,Aaqib Azees,Male,Othe
 Kozhikode,Mss Kanivu Special School Farook College,KKDS10,Minhal,Male,Other Backward Classes (OBC),Cerebral Palsy,,,1,adaptive pencil grip,Assistive
 Kozhikode,Mss Kanivu Special School Farook College,KKDS10,DIJU AT,Female,Other Backward Classes (OBC),Down Syndrome,,,1,reading bar,Assistive
 Kozhikode,Mss Kanivu Special School Farook College,KKDS10,Adithya pk,Female,Other Backward Classes (OBC),Down Syndrome,,,1,reading bar,Assistive
-Thrissur,Nakshatrakoodaram Brc,TSRR03,Aiswarya Lakshmi,Female,Other Backward Classes (OBC),Other,,,1,adaptive pencil grip,Assistive
+Thrissur,Nakshatrakoodaram Brc,TSRR03,Aiswarya Lakshmi,Female,Other Backward Classes (OBC),Locomotor Disability,,,1,adaptive pencil grip,Assistive
 Thrissur,Nakshatrakoodaram Brc,TSRR03,Manikandan ,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,adaptive pencil grip,Assistive
 Kozhikode,Sanjoe Pratheeksha Bhavan Special School,KKDS01,Nashwa Nisar,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,adaptive pencil grip,Assistive
 Kozhikode,Sanjoe Pratheeksha Bhavan Special School,KKDS01,Kasinath,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,button aid,Assistive
@@ -870,13 +870,13 @@ Kannur,Taliparamba Buds School,KNRB07,Muhammad Sabeeb M,Male,Other Backward Clas
 Kannur,Taliparamba Buds School,KNRB07,Ayishathul Zidna Sherin,Female,Other Backward Classes (OBC),Cerebral Palsy,,,1,low profile switch,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ARYAHI RAJESH ,Female,Other Backward Classes (OBC),Cerebral Palsy,2.5,7.5,1,utensil holder,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ATHUL KRISHNA ,Male,General,Cerebral Palsy,2.5,7.5,1,utensil holder,Assistive
-Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Other,,,1,button aid,Assistive
+Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Locomotor Disability,,,1,button aid,Assistive
 Kannur,Taliparamba Buds School,KNRB07,DEVANJANA P,Female,General,Down Syndrome,,,1,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Swaliha K K,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
 Kannur,Taliparamba Buds School,KNRB07,HASSIM HARIS A P,Male,Other Backward Classes (OBC),Autism,,,1,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Siva nandh B,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
 Kannur,Taliparamba Buds School,KNRB07,HASHIF K T ,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
-Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Other,,,1,maze,Cognitive
+Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Locomotor Disability,,,1,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad Faisan K,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,MUHAMMAD MURSHID K T,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad Najil P,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
@@ -1148,19 +1148,19 @@ Trivandrum,St Marthais Special School Menamkulam,TVMS03,Thraya Yathi,Female,Othe
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Akhilesh. S,Male,General,Intellectual Disability,,,1,adaptive pencil grip,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Anjana M.A,Female,General,Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Suja.R.Nair,Female,General,Intellectual Disability,,,1,palm pen holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Soumia. K,Female,Scheduled Tribe (ST),Other,3.0,9.0,1,utensil holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Soumia. K,Female,Scheduled Tribe (ST),Intellectual Disability,3.0,9.0,1,utensil holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Shivansh S Varma,Male,General,Learning Disability,1.0,5.0,1,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Steve Ryan Sanoj,Male,Other Backward Classes (OBC),Other,,,1,adaptive pencil grip,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Vaishnav Ragesh,Male,General,Other,1.4,5.8,1,utensil holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Abhijith A,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,braille,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Speech Impairment,3.0,11.0,1,toothbrush holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Intellectual Disability,3.0,11.0,1,toothbrush holder,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Udayakumar B,Male,General,Intellectual Disability,,,1,reading bar,Assistive
 Trivandrum,Poovachal Buds School,TVMBO7,Sudha. S,Female,Other Backward Classes (OBC),Intellectual Disability,1.5,8.0,1,utensil holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Santhosh R S,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Mohammad Farhan,Male,Other Backward Classes (OBC),Autism,1.8,7.0,1,palm pen holder,Assistive
 Kollam,Perinad Brc Kollam,KLMR09,Ahana ameen.s,Female,General,Intellectual Disability,,,1,reading bar,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Rejith.R,Male,Scheduled Caste (SC),Intellectual Disability,,,1,low profile switch,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Other,2.5,9.0,1,utensil holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Autism,2.5,9.0,1,utensil holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Faizan Muhammad Shibin,Male,Other Backward Classes (OBC),Intellectual Disability,1.5,5.8,1,palm pen holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Divya ,Female,Scheduled Caste (SC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Poovachal Buds School,TVMBO7,Shine jose,Male,Other Backward Classes (OBC),Intellectual Disability,,9.0,1,utensil holder,Assistive
@@ -1170,19 +1170,19 @@ Trivandrum,Poovachal Buds School,TVMBO7,Nikhil. S. S,Male,Other Backward Classes
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Muhammed Rashid R,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,tetris,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Avanthika Pradeep,Female,Other Backward Classes (OBC),Autism,1.5,5.9,1,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Sidharth Satheesh,Male,Other Backward Classes (OBC),Autism,,,1,button aid,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Abin,Male,Other Backward Classes (OBC),Other,,,1,toothbrush holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Abin,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,toothbrush holder,Assistive
 Trivandrum,Poovachal Buds School,TVMBO7,Athira.S,Female,Other Backward Classes (OBC),Cerebral Palsy,2.2,7.0,1,utensil holder,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Aji. SS,Male,Scheduled Caste (SC),Intellectual Disability,,7.5,1,palm pen holder,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Adarsh.B,Male,General,Intellectual Disability,1.5,,1,palm pen holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),ADHD,,,1,reading bar,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),Autism,,,1,reading bar,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Anupama RS,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Panchami Nair ,Female,General,Speech Impairment,,,1,button aid,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Panchami Nair ,Female,General,Intellectual Disability,,,1,button aid,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Arun Prasad ,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Aruvikkara Brc,TVMR25,ANUJITJ,Male,General,Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Ansil S,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,toothbrush holder,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Al Ameen S,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Hema Malini ,Female,General,Intellectual Disability,,,1,toothbrush holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Prasanna. S,Female,General,Other,,,1,button aid,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Prasanna. S,Female,General,Intellectual Disability,,,1,button aid,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Sivahari S D,Male,Other Backward Classes (OBC),Other,,,1,braille,Assistive
 Trivandrum,Aruvikkara Brc,TVMR25,Abhiraj ,Male,General,Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Lidiya A,Female,Other Backward Classes (OBC),Intellectual Disability,1.9,6.0,1,toothbrush holder,Assistive
@@ -1260,13 +1260,13 @@ Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Farhan .F,Ma
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Amiritha.J.,Female,Other Backward Classes (OBC),Down Syndrome,,,1,tetris,Cognitive
 Kollam,Perinad Brc Kollam,KLMR09,Anna Glory ,Female,General,Intellectual Disability,,,1,reading bar,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Neefa shajir,Female,Other Backward Classes (OBC),Cerebral Palsy,,,1,utensil holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Visual Impairment,2.5,9.0,1,utensil holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Intellectual Disability,2.5,9.0,1,utensil holder,Assistive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Achu S ,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,palm pen holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Gayathri.M,Female,Scheduled Caste (SC),Autism,,,1,toothbrush holder,Assistive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Ambadi S kumar ,Male,Scheduled Caste (SC),Intellectual Disability,,,1,palm pen holder,Assistive
 Trivandrum,Aruvikkara Brc,TVMR25,Seena. R,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Aruvikkara Brc,TVMR25,SREELEKSHMI,Female,Scheduled Caste (SC),Intellectual Disability,,,1,tetris,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Ratheesh R,Male,Other Backward Classes (OBC),Other,,,1,palm pen holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Ratheesh R,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,palm pen holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Vishnu vs,Female,General,Intellectual Disability,,,1,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Muhammad Muhsin ,Male,Other Backward Classes (OBC),Learning Disability,,,1,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Samuel Shiju Abraham,Male,General,Other,2.1,6.4,1,toothbrush holder,Assistive
@@ -1392,7 +1392,7 @@ Trivandrum,Vamanapuram Brc,TVMR30,Neeraj Gopan ,Male,General,Intellectual Disabi
 Trivandrum,Vamanapuram Brc,TVMR30,Akhil Krishna. S,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,tetris,Cognitive
 Trivandrum,Poovachal Buds School,TVMBO7,Manu,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Ajeesh kumar ,Male,Other Backward Classes (OBC),Other,,,1,reading bar,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Dileep. D,Male,General,Down Syndrome,,,1,button aid,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Dileep. D,Male,General,Intellectual Disability,,,1,button aid,Assistive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Akbarsha S,Male,Other Backward Classes (OBC),Other,1.2,7.3,1,utensil holder,Assistive
 Trivandrum,Poovachal Buds School,TVMBO7,Sujith S S,Male,Other Backward Classes (OBC),Cerebral Palsy,,,1,maze,Cognitive
 Trivandrum,Karunya Buds School Pothencode,TVMR16,Sajeev D ,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,button aid,Assistive
@@ -1440,7 +1440,7 @@ Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Praveen KP,Male,General
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Vinoy MV,Male,General,Intellectual Disability,,,1,reading bar,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Binsina KN,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Anto C Paul,Male,General,Intellectual Disability,,,1,reading bar,Assistive
-Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Other,,,1,palm pen holder,Assistive
+Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Locomotor Disability,,,1,palm pen holder,Assistive
 Kollam,Anchal Brc,KLMR13,KRISHNA,Female,General,Intellectual Disability,,,1,low profile switch,Assistive
 Trivandrum,Poovachal Buds School,TVMBO7,Athulkrishna,Male,Other Backward Classes (OBC),Autism,,,1,maze,Cognitive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Jinil AG,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
@@ -1486,7 +1486,7 @@ Kollam,Anchal Brc,KLMR13,Abubakker,Male,Other Backward Classes (OBC),Intellectua
 Kollam,Anchal Buds School,KLMB18,THASLEEMA,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,adaptive pencil grip,Assistive
 Kollam,Anchal Brc,KLMR13,ANEESH ,Male,General,Intellectual Disability,,,1,tetris,Cognitive
 Kollam,Ittiva Buds School For Mentally Challenge,KLMB13,Visha KB,Male,Scheduled Caste (SC),Intellectual Disability,,,1,palm pen holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Adwaith. M,Male,General,Learning Disability,,,1,adaptive pencil grip,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Adwaith. M,Male,General,Intellectual Disability,,,1,adaptive pencil grip,Assistive
 Kollam,Anchal Brc,KLMR13,Rahul ,Male,General,Intellectual Disability,,,1,tetris,Cognitive
 Kollam,Anchal Brc,KLMR13,Arun,Male,General,Intellectual Disability,2.5,8.5,1,toothbrush holder,Assistive
 Kollam,Anchal Brc,KLMR13,Al-Ameen,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
@@ -1499,6 +1499,12 @@ Kollam,Anchal Buds School,KLMB18,Abel binu,Male,General,Intellectual Disability,
 Kollam,Anchal Buds School,KLMB18,സൈഡാലി. S,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,toothbrush holder,Assistive
 Kollam,Anchal Buds School,KLMB18,Ashina ayoob ,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,maze,Cognitive
 Trivandrum,Poovachal Buds School,TVMBO7,Arya Surendran,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,tetris,Cognitive
+Malappuram,Buds Special School Koottilangadi,MPMB12,Shameer moideen,Male,Other Backward Classes (OBC),Intellectual Disability,,,1,palm pen holder,Assistive
+Malappuram,Buds Special School Koottilangadi,MPMB12,Vipin raj,Male,Other Backward Classes (OBC),Locomotor Disability,,,1,low profile switch,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,ARCHITHA P,Female,General,Intellectual Disability,,,1,reading bar,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,AYISHA,Female,Other Backward Classes (OBC),Intellectual Disability,,,1,reading bar,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,RAKHI,Female,Scheduled Caste (SC),Intellectual Disability,,,1,reading bar,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,NIKHIL M S,Male,Scheduled Caste (SC),Intellectual Disability,,,1,utensil holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Rishon Shyrin,Male,Other Backward Classes (OBC),Intellectual Disability,2.0,6.3,1,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Sreenantha A. H,Female,Other Backward Classes (OBC),Autism,2.0,6.0,1,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Ayaan Muhammad,Male,Other Backward Classes (OBC),Cerebral Palsy,,,1,button aid,Assistive
@@ -1928,7 +1934,7 @@ Malappuram,Manovikas Edarikode,MPMS08,Muhammed suhail,Female,Other Backward Clas
 Malappuram,Manovikas Edarikode,MPMS08,Sree lakshmi,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Malappuram,Manovikas Edarikode,MPMS08,Muhammad murshid,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,palm pen holder,Assistive
 Malappuram,Manovikas Edarikode,MPMS08,Muhammad nabhan p ,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,utensil holder,Assistive
-Thrissur,Nakshatrakoodaram Brc,TSRR03,Aiswarya Lakshmi,Female,Other Backward Classes (OBC),Other,,,2,button aid,Assistive
+Thrissur,Nakshatrakoodaram Brc,TSRR03,Aiswarya Lakshmi,Female,Other Backward Classes (OBC),Locomotor Disability,,,2,button aid,Assistive
 Kozhikode,Sanjoe Pratheeksha Bhavan Special School,KKDS01,Nashwa Nisar,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,toothbrush holder,Assistive
 Kozhikode,Sanjoe Pratheeksha Bhavan Special School,KKDS01,Kasinath,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,maze,Cognitive
 Kozhikode,Sanjoe Pratheeksha Bhavan Special School,KKDS01,Anusree Mp,Female,General,Intellectual Disability,,,2,tetris,Cognitive
@@ -2222,12 +2228,12 @@ Kannur,Taliparamba Buds School,KNRB07,Muhammad Sabeeb M,Male,Other Backward Clas
 Kannur,Taliparamba Buds School,KNRB07,Ayishathul Zidna Sherin,Female,Other Backward Classes (OBC),Cerebral Palsy,,,2,button aid,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ARYAHI RAJESH ,Female,Other Backward Classes (OBC),Cerebral Palsy,2.5,7.5,2,toothbrush holder,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ATHUL KRISHNA ,Male,General,Cerebral Palsy,2.5,7.5,2,toothbrush holder,Assistive
-Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Other,,,2,maze,Cognitive
+Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Locomotor Disability,,,2,maze,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,DEVANJANA P,Female,General,Down Syndrome,,,2,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Swaliha K K,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,adaptive pencil grip,Assistive
 Kannur,Taliparamba Buds School,KNRB07,HASSIM HARIS A P,Male,Other Backward Classes (OBC),Autism,,,2,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,HASHIF K T ,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
-Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Other,,,2,tetris,Cognitive
+Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Locomotor Disability,,,2,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad Faisan K,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,MUHAMMAD MURSHID K T,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad Najil P,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
@@ -2451,27 +2457,27 @@ Trivandrum,St Marthais Special School Menamkulam,TVMS03,Thraya Yathi,Female,Othe
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Akhilesh. S,Male,General,Intellectual Disability,,,2,utensil holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Anjana M.A,Female,General,Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Suja.R.Nair,Female,General,Intellectual Disability,,,2,tetris,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Soumia. K,Female,Scheduled Tribe (ST),Other,,,2,adaptive pencil grip,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Soumia. K,Female,Scheduled Tribe (ST),Intellectual Disability,,,2,adaptive pencil grip,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Shivansh S Varma,Male,General,Learning Disability,,,2,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Steve Ryan Sanoj,Male,Other Backward Classes (OBC),Other,,,2,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Vaishnav Ragesh,Male,General,Other,,,2,maze,Cognitive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Abhijith A,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,maze,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Speech Impairment,,,2,adaptive pencil grip,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,adaptive pencil grip,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Udayakumar B,Male,General,Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Santhosh R S,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Mohammad Farhan,Male,Other Backward Classes (OBC),Autism,1.8,7.0,2,utensil holder,Assistive
 Kollam,Perinad Brc Kollam,KLMR09,Ahana ameen.s,Female,General,Intellectual Disability,,,2,palm pen holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Rejith.R,Male,Scheduled Caste (SC),Intellectual Disability,,,2,tetris,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Other,2.5,9.0,2,palm pen holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Autism,2.5,9.0,2,palm pen holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Faizan Muhammad Shibin,Male,Other Backward Classes (OBC),Intellectual Disability,1.5,5.8,2,utensil holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Divya ,Female,Scheduled Caste (SC),Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Athira S,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Althaf A,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Muhammed Rashid R,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,maze,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Sidharth Satheesh,Male,Other Backward Classes (OBC),Autism,,,2,maze,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Abin,Male,Other Backward Classes (OBC),Other,,,2,adaptive pencil grip,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Abin,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,adaptive pencil grip,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Adarsh.B,Male,General,Intellectual Disability,,,2,maze,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),ADHD,,,2,low profile switch,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),Autism,,,2,low profile switch,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Arun Prasad ,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,button aid,Assistive
 Trivandrum,Aruvikkara Brc,TVMR25,ANUJITJ,Male,General,Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Al Ameen S,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,toothbrush holder,Assistive
@@ -2521,11 +2527,11 @@ Thrissur,Pope Paul Mercy Home,TSRS01,RIHAN R J,Male,Other Backward Classes (OBC)
 Trivandrum,Aruvikkara Brc,TVMR25,Anamika Sreekumar ,Female,General,Intellectual Disability,,,2,tetris,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Amiritha.J.,Female,Other Backward Classes (OBC),Down Syndrome,,,2,maze,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Neefa shajir,Female,Other Backward Classes (OBC),Cerebral Palsy,,,2,utensil holder,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Visual Impairment,2.5,9.0,2,palm pen holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Intellectual Disability,2.5,9.0,2,palm pen holder,Assistive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Achu S ,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,button aid,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Gayathri.M,Female,Scheduled Caste (SC),Autism,,,2,maze,Cognitive
 Trivandrum,Aruvikkara Brc,TVMR25,Seena. R,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Ratheesh R,Male,Other Backward Classes (OBC),Other,,,2,toothbrush holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Ratheesh R,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,toothbrush holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Vishnu vs,Female,General,Intellectual Disability,,,2,utensil holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Muhammad Muhsin ,Male,Other Backward Classes (OBC),Learning Disability,,,2,tetris,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Samuel Shiju Abraham,Male,General,Other,2.1,6.4,2,palm pen holder,Assistive
@@ -2635,7 +2641,7 @@ Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Alan Babu,Male,General,
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Jibin Jose,Male,General,Intellectual Disability,,,2,button aid,Assistive
 Kollam,Anchal Brc,KLMR13,BINU,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,tetris,Cognitive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Akhil Baby,Male,Other Backward Classes (OBC),Cerebral Palsy,3.41,8.12,2,utensil holder,Assistive
-Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Other,,,2,button aid,Assistive
+Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Locomotor Disability,,,2,button aid,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Anly Francis,Female,General,Intellectual Disability,,,2,reading bar,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Devananda,Female,Other Backward Classes (OBC),Cerebral Palsy,,,2,adaptive pencil grip,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Prajitha VP,Female,Other Backward Classes (OBC),Intellectual Disability,2.12,6.15,2,utensil holder,Assistive
@@ -2668,6 +2674,8 @@ Trivandrum,Aruvikkara Brc,TVMR25,Baiju,Male,Other Backward Classes (OBC),Intelle
 Kollam,Anchal Buds School,KLMB18,Abel binu,Male,General,Intellectual Disability,,,2,tetris,Cognitive
 Kollam,Anchal Buds School,KLMB18,സൈഡാലി. S,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,maze,Cognitive
 Kollam,Anchal Buds School,KLMB18,Ashina ayoob ,Female,Other Backward Classes (OBC),Intellectual Disability,,,2,toothbrush holder,Assistive
+Malappuram,Buds Special School Koottilangadi,MPMB12,Shameer moideen,Male,Other Backward Classes (OBC),Intellectual Disability,,,2,adaptive pencil grip,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,NIKHIL M S,Male,Scheduled Caste (SC),Intellectual Disability,,,2,toothbrush holder,Assistive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Ayaan Muhammad,Male,Other Backward Classes (OBC),Cerebral Palsy,,,2,tetris,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Joshua Renoy,Male,General,Autism,,,2,tetris,Cognitive
 Trivandrum,St Marthais Special School Menamkulam,TVMS03,Hrishikesh Pradeep,Male,Other Backward Classes (OBC),Autism,,,2,tetris,Cognitive
@@ -3107,9 +3115,9 @@ Kannur,Taliparamba Buds School,KNRB07,Muhammad Sabeeb M,Male,Other Backward Clas
 Kannur,Taliparamba Buds School,KNRB07,Ayishathul Zidna Sherin,Female,Other Backward Classes (OBC),Cerebral Palsy,2.5,7.5,3,toothbrush holder,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ARYAHI RAJESH ,Female,Other Backward Classes (OBC),Cerebral Palsy,2.5,7.5,3,palm pen holder,Assistive
 Kannur,Taliparamba Buds School,KNRB07,ATHUL KRISHNA ,Male,General,Cerebral Palsy,2.5,7.5,3,palm pen holder,Assistive
-Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Other,,,3,tetris,Cognitive
+Kannur,Taliparamba Buds School,KNRB07,DAYAL RAJ,Male,General,Locomotor Disability,,,3,tetris,Cognitive
 Kannur,Taliparamba Buds School,KNRB07,DEVANJANA P,Female,General,Down Syndrome,,,3,button aid,Assistive
-Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Other,,,3,button aid,Assistive
+Kannur,Taliparamba Buds School,KNRB07,KARTHIK PRASAD C M,Male,Other Backward Classes (OBC),Locomotor Disability,,,3,button aid,Assistive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad Ranees V K,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,reading bar,Assistive
 Kannur,Taliparamba Buds School,KNRB07,Asna Salam,Female,Other Backward Classes (OBC),Intellectual Disability,,,3,reading bar,Assistive
 Kannur,Taliparamba Buds School,KNRB07,Muhammad C P,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,reading bar,Assistive
@@ -3263,15 +3271,15 @@ Trivandrum,Nedumangad Municipality Buds School,TVMB08,Akhilesh. S,Male,General,I
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Anjana M.A,Female,General,Intellectual Disability,,,3,braille,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Suja.R.Nair,Female,General,Intellectual Disability,,,3,braille,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Abhijith A,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,tetris,Cognitive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Speech Impairment,3.0,11.0,3,utensil holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Devanandha,Female,Other Backward Classes (OBC),Intellectual Disability,3.0,11.0,3,utensil holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Santhosh R S,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,braille,Assistive
 Kollam,Perinad Brc Kollam,KLMR09,Ahana ameen.s,Female,General,Intellectual Disability,,,3,adaptive pencil grip,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Rejith.R,Male,Scheduled Caste (SC),Intellectual Disability,,,3,braille,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Other,2.5,9.0,3,toothbrush holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Gouthamkrishna,Male,General,Autism,2.5,9.0,3,toothbrush holder,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Divya ,Female,Scheduled Caste (SC),Intellectual Disability,,,3,braille,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Athira S,Female,Other Backward Classes (OBC),Intellectual Disability,,,3,reading bar,Assistive
 Trivandrum,Chaithanya Buds Rehabilitation Centre Aryanad,TVMR21,Althaf A,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,braille,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),ADHD,,,3,adaptive pencil grip,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,SUBUHAN ,Male,Other Backward Classes (OBC),Autism,,,3,adaptive pencil grip,Assistive
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Savin S,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,toothbrush holder,Assistive
 Kollam,Ittiva Buds School For Mentally Challenge,KLMB13,Suraj,Male,Scheduled Caste (SC),Intellectual Disability,,,3,maze,Cognitive
 Thrissur,Pope Paul Mercy Home,TSRS01,JOBY GEORGE,Male,General,Intellectual Disability,,,3,palm pen holder,Assistive
@@ -3293,7 +3301,7 @@ Thrissur,Pope Paul Mercy Home,TSRS01,SONU DAVID,Male,General,Autism,,,3,toothbru
 Trivandrum,Sneha Brc Uzhamalakkal,TVMR20,Athira S U,Female,General,Intellectual Disability,,,3,tetris,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Amiritha.J.,Female,Other Backward Classes (OBC),Down Syndrome,,,3,braille,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Neefa shajir,Female,Other Backward Classes (OBC),Cerebral Palsy,,,3,button aid,Assistive
-Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Visual Impairment,2.5,9.0,3,toothbrush holder,Assistive
+Trivandrum,Karunya Buds School Pothencode,TVMR16,Jishnu ajith,Male,Scheduled Caste (SC),Intellectual Disability,2.5,9.0,3,toothbrush holder,Assistive
 Trivandrum,Pangode Gramapanchayath Vattakarikkom Buds School,TVMB02,Achu S ,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,toothbrush holder,Assistive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Gayathri.M,Female,Scheduled Caste (SC),Autism,,,3,tetris,Cognitive
 Trivandrum,Nedumangad Municipality Buds School,TVMB08,Vishnu vs,Female,General,Intellectual Disability,,,3,toothbrush holder,Assistive
@@ -3370,7 +3378,7 @@ Kollam,Anchal Brc,KLMR13,Salu B,Female,Scheduled Caste (SC),Intellectual Disabil
 Kollam,Anchal Brc,KLMR13,SREEJITH,Male,General,Intellectual Disability,,,3,maze,Cognitive
 Kollam,Anchal Brc,KLMR13,BINU,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,maze,Cognitive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Akhil Baby,Male,Other Backward Classes (OBC),Cerebral Palsy,3.41,8.12,3,toothbrush holder,Assistive
-Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Other,,,3,toothbrush holder,Assistive
+Kollam,Anchal Brc,KLMR13,Anandhu,Male,General,Locomotor Disability,,,3,toothbrush holder,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Devananda,Female,Other Backward Classes (OBC),Cerebral Palsy,,,3,button aid,Assistive
 Thrissur,Snehasparsham Buds Rehabilitation Centre,TSRR01,Prajitha VP,Female,Other Backward Classes (OBC),Intellectual Disability,,,3,adaptive pencil grip,Assistive
 Thrissur,Snehagiri Mithralayam,TSRS03,Savio ,Male,General,Intellectual Disability,,,3,tetris,Cognitive
@@ -3394,3 +3402,27 @@ Kollam,Anchal Buds School,KLMB18,Al-Aman,Male,Other Backward Classes (OBC),Intel
 Kollam,Anchal Brc,KLMR13,Hishana,Female,Other Backward Classes (OBC),Intellectual Disability,2.5,8.5,3,toothbrush holder,Assistive
 Kollam,Anchal Buds School,KLMB18,Abel binu,Male,General,Intellectual Disability,,,3,reading bar,Assistive
 Kollam,Anchal Buds School,KLMB18,Ashina ayoob ,Female,Other Backward Classes (OBC),Intellectual Disability,,,3,palm pen holder,Assistive
+Malappuram,Buds Special School Koottilangadi,MPMB12,Shameer moideen,Male,Other Backward Classes (OBC),Intellectual Disability,,,3,toothbrush holder,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,SAJANA,Female,Other Backward Classes (OBC),Intellectual Disability,,,3,reading bar,Assistive
+Thrissur,Pengattussery Narayanan Memorial,TSRR12,NIKHIL M S,Male,Scheduled Caste (SC),Intellectual Disability,,,3,button aid,Assistive
+Thrissur,Akashaparavakal,TSRR14,GOKUL M.U,Male,Scheduled Caste (SC),Down Syndrome,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,SRUTHI K C,Female,Other Backward Classes (OBC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,AJMAL P A,Male,Other Backward Classes (OBC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,SUMEESH V M,Male,General,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,SHIJIL KRISHNA,Male,Maritime Community,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,SARATH,Male,Maritime Community,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,ARUN,Male,Other Backward Classes (OBC),Other,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Sreevya A. S,Female,Scheduled Caste (SC),Down Syndrome,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Hamna savad,Female,General,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Junaid M.S,Male,General,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Sanjith K. S,Male,Other Backward Classes (OBC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Tommy Johnson,Male,General,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Vibitha K. D,Female,Scheduled Caste (SC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Femeer Ameer,Male,General,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Sreevidhya C. M,Female,Scheduled Caste (SC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Aadam A. F,Male,Maritime Community,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,SHIVAJI KRISHNA,Male,Maritime Community,Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,NAJID NOWSHAD,Male,Other Backward Classes (OBC),Cerebral Palsy,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,MUHAMMED KALEEFA,Male,Other Backward Classes (OBC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,NABEEL A S,Male,Other Backward Classes (OBC),Intellectual Disability,,,Common,low profile switch,Assistive
+Thrissur,Akashaparavakal,TSRR14,Sooraj,Male,General,Intellectual Disability,,,Common,low profile switch,Assistive
