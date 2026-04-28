@@ -20,7 +20,7 @@ st.set_page_config(
 REFRESH_INTERVAL_MS = 3600000
 DATA_CACHE_TTL_SECONDS = 3600
 PROJECT_DIR = Path(__file__).resolve().parent
-INSTITUTE_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRA5xR4_4FH1P3RcKgtr81U3qsKJYDk4kAn715HhziF7tALwa7il_NMLAyRYci0pABHCg17aGHAPv4l/pub?output=csv"
+CDC_PATH = PROJECT_DIR / "data" / "CDC.txt"
 CATALOG_PATHS = [
     PROJECT_DIR / "data" / "DEVICE_INFORMATION_CATALOG_FINAL.xlsx",
     Path(r"C:\Users\hp\Downloads\DEVICE_INFORMATION_CATALOG_FINAL.xlsx"),
@@ -275,10 +275,6 @@ st.markdown(
             border: 1px solid #dbeafe;
             border-radius: 8px;
             padding: 1rem;
-        }}
-
-        [data-testid="stDataFrame"] [data-testid="stElementToolbar"] {{
-            display: none !important;
         }}
 
         [data-testid="stExpander"] {{
@@ -578,32 +574,33 @@ def display_device_name(value):
 
 
 @st.cache_data(ttl=DATA_CACHE_TTL_SECONDS)
-def load_institute_data(sheet_url):
-    try:
-        raw_df = pd.read_csv(sheet_url)
-    except Exception:
+def load_cdc_data(cdc_path):
+    path = Path(cdc_path)
+    if not path.exists():
         return pd.DataFrame(columns=["Institute", "District", "Device", "Device Category", "Requests", "Source"])
 
-    raw_df.columns = raw_df.columns.str.strip()
-    if raw_df.empty:
-        return pd.DataFrame(columns=["Institute", "District", "Device", "Device Category", "Requests", "Source"])
+    records = []
+    for raw_line in path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.lower() == "cdc" or line.lower().startswith("total count"):
+            continue
+        match = re.match(r"^(.*?)\s*-\s*(\d+)\s*$", line)
+        if not match:
+            continue
+        device = normalize_device_name(match.group(1))
+        requests = int(match.group(2))
+        records.append(
+            {
+                "Institute": "CDC",
+                "District": "Trivandrum",
+                "Device": device,
+                "Device Category": DEVICE_CATEGORY_MAP.get(device, "Other"),
+                "Requests": requests,
+                "Source": "Institute",
+            }
+        )
 
-    id_cols = ["Institution", "District", "Total"]
-    device_cols = [col for col in raw_df.columns if col not in id_cols]
-    melted = raw_df.melt(
-        id_vars=["Institution", "District"],
-        value_vars=device_cols,
-        var_name="Device",
-        value_name="Requests",
-    )
-    melted["Requests"] = pd.to_numeric(melted["Requests"], errors="coerce").fillna(0).astype(int)
-    melted = melted[melted["Requests"] > 0].copy()
-    melted["Device"] = melted["Device"].map(normalize_device_name)
-    melted["District"] = melted["District"].astype(str).str.strip().str.title().replace({"Thiruvananthapuram": "Trivandrum", "Tvm": "Trivandrum"})
-    melted["Institute"] = melted["Institution"].astype(str).str.strip()
-    melted["Device Category"] = melted["Device"].map(DEVICE_CATEGORY_MAP).fillna("Other")
-    melted["Source"] = "Institute"
-    return melted[["Institute", "District", "Device", "Device Category", "Requests", "Source"]]
+    return pd.DataFrame(records)
 
 
 def style_chart(fig, height=380, show_colorbar=False):
@@ -923,25 +920,7 @@ school_df["Other requirement"] = pd.NA
 bedridden_df = load_bedridden_data_streamlit().copy()
 people_df = pd.concat([school_df, bedridden_df], ignore_index=True, sort=False)
 catalog = load_device_catalog(str(CATALOG_PATH))
-institute_agg_df = load_institute_data(INSTITUTE_SHEET_URL)
-institutes_df = institute_agg_df.loc[institute_agg_df.index.repeat(institute_agg_df["Requests"])].copy() if not institute_agg_df.empty else institute_agg_df.copy()
-if not institutes_df.empty:
-    institutes_df["School_Name"] = pd.NA
-    institutes_df["School ID"] = pd.NA
-    institutes_df["Student Name"] = pd.NA
-    institutes_df["Gender"] = pd.NA
-    institutes_df["Social Category"] = pd.NA
-    institutes_df["disability_cleaned"] = pd.NA
-    institutes_df["Palm Width Cleaned"] = pd.NA
-    institutes_df["Palm Length Cleaned"] = pd.NA
-    institutes_df["Priority"] = "Institute"
-    institutes_df["Data Source"] = "Institutes"
-    institutes_df["Record Type"] = "Institute"
-    institutes_df["Name"] = pd.NA
-    institutes_df["Age"] = pd.NA
-    institutes_df["Contact No"] = pd.NA
-    institutes_df["Address"] = pd.NA
-    institutes_df["Other requirement"] = pd.NA
+cdc_df = load_cdc_data(str(CDC_PATH))
 
 if "kpi_basis" not in st.session_state:
     st.session_state["kpi_basis"] = "Auto"
@@ -979,7 +958,7 @@ source_base_df = {
     "Combined": people_df,
     "Schools": school_df,
     "Bedridden": bedridden_df,
-    "Institutes": institutes_df,
+    "Institutes": cdc_df.rename(columns={"Requests": "Request Count"}),
 }[analysis_scope]
 
 districts = sorted(source_base_df["District"].dropna().unique())
@@ -1008,7 +987,7 @@ selected_categories = render_slicer(
 devices = sorted(source_base_df["Device"].dropna().unique())
 selected_devices = render_slicer("Devices", devices, "devices_filter", "Choose devices")
 
-institutes = sorted(institute_agg_df["Institute"].dropna().unique()) if not institute_agg_df.empty else []
+institutes = sorted(cdc_df["Institute"].dropna().unique()) if not cdc_df.empty else []
 selected_institutes = (
     render_slicer("Institutes", institutes, "institutes_filter", "Choose institutes")
     if institutes
@@ -1045,23 +1024,17 @@ filtered_df = {
     "Combined": pd.concat([school_filtered_df, bedridden_filtered_df], ignore_index=True, sort=False),
     "Schools": school_filtered_df,
     "Bedridden": bedridden_filtered_df,
-    "Institutes": institutes_df[
-        (institutes_df["District"].isin(selected_districts))
-        & (institutes_df["Device Category"].isin(selected_categories))
-        & (institutes_df["Device"].isin(selected_devices))
-        & (institutes_df["Institute"].isin(selected_institutes if selected_institutes else institutes))
-    ].copy(),
 }[analysis_scope].copy()
 size_chart_df = build_size_chart_data(filtered_df, catalog)
 
-institute_filtered = institute_agg_df[
-    (institute_agg_df["District"].isin(selected_districts))
-    & (institute_agg_df["Device Category"].isin(selected_categories))
-    & (institute_agg_df["Device"].isin(selected_devices))
-    & (institute_agg_df["Institute"].isin(selected_institutes if selected_institutes else institutes))
+cdc_filtered = cdc_df[
+    (cdc_df["District"].isin(selected_districts))
+    & (cdc_df["Device Category"].isin(selected_categories))
+    & (cdc_df["Device"].isin(selected_devices))
+    & (cdc_df["Institute"].isin(selected_institutes if selected_institutes else institutes))
 ].copy()
 
-institute_requests_total = int(institute_filtered["Requests"].sum()) if not institute_filtered.empty else 0
+cdc_requests = int(cdc_filtered["Requests"].sum()) if not cdc_filtered.empty else 0
 
 school_requests = len(school_filtered_df)
 bedridden_requests = len(bedridden_filtered_df)
@@ -1070,9 +1043,9 @@ analysis_requests = len(filtered_df)
 analysis_device_counts = filtered_df["Device"].value_counts() if not filtered_df.empty else pd.Series(dtype="int64")
 school_device_counts = school_filtered_df["Device"].value_counts() if not school_filtered_df.empty else pd.Series(dtype="int64")
 bedridden_device_counts = bedridden_filtered_df["Device"].value_counts() if not bedridden_filtered_df.empty else pd.Series(dtype="int64")
-institute_device_counts_agg = institute_filtered.groupby("Device")["Requests"].sum() if not institute_filtered.empty else pd.Series(dtype="int64")
-combined_device_counts = analysis_device_counts.add(institute_device_counts_agg, fill_value=0).sort_values(ascending=False)
-institute_kpi_df = institute_filtered.copy()
+cdc_device_counts = cdc_filtered.groupby("Device")["Requests"].sum() if not cdc_filtered.empty else pd.Series(dtype="int64")
+combined_device_counts = analysis_device_counts.add(cdc_device_counts, fill_value=0).sort_values(ascending=False)
+institute_kpi_df = cdc_filtered.copy()
 institute_requests = int(institute_kpi_df["Requests"].sum()) if not institute_kpi_df.empty else 0
 institute_device_counts = (
     institute_kpi_df.groupby("Device")["Requests"].sum().sort_values(ascending=False)
@@ -1125,7 +1098,7 @@ else:
         scope_count_value = institute_count
         scope_count_label = "institutes"
     else:
-        total_requests = analysis_requests + (institute_requests_total if analysis_scope == "Combined" else 0)
+        total_requests = analysis_requests + (institute_requests if analysis_scope == "Combined" else 0)
         active_device_counts = combined_device_counts if analysis_scope == "Combined" else analysis_device_counts
         top_device = display_device_name(active_device_counts.idxmax()) if not active_device_counts.empty else "No data"
         if analysis_scope == "Bedridden":
@@ -1140,7 +1113,7 @@ else:
     priority_value = priority_one
 
 top_district = (
-    (institute_filtered["District"].value_counts().idxmax() if not institute_filtered.empty else "No data")
+    (cdc_filtered["District"].value_counts().idxmax() if not cdc_filtered.empty else "No data")
     if analysis_scope == "Institutes"
     else (
         filtered_df["District"].value_counts().idxmax()
@@ -1171,7 +1144,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-if (analysis_scope == "Institutes" and institute_filtered.empty) or (analysis_scope != "Institutes" and filtered_df.empty and institute_filtered.empty):
+if (analysis_scope == "Institutes" and cdc_filtered.empty) or (analysis_scope != "Institutes" and filtered_df.empty and cdc_filtered.empty):
     st.markdown(
         """
         <div class="empty-state">
@@ -1387,11 +1360,17 @@ with bedridden_tab:
             ["Name", "Age", "Gender", "Contact No", "Address", "District", "disability_cleaned", "Device", "Other requirement"]
         ].rename(columns={"disability_cleaned": "Disability"})
         st.dataframe(bedridden_display, hide_index=True, width="stretch")
+        st.download_button(
+            label="Download cleaned bedridden CSV",
+            data=bedridden_display.to_csv(index=False).encode("utf-8"),
+            file_name="cleaned_bedridden_data.csv",
+            mime="text/csv",
+        )
 
 with institutes_tab:
     st.markdown('<div class="section-title">Institutes</div>', unsafe_allow_html=True)
 
-    if institute_filtered.empty:
+    if cdc_filtered.empty:
         st.markdown(
             """
             <div class="empty-state">
@@ -1401,10 +1380,10 @@ with institutes_tab:
             unsafe_allow_html=True,
         )
     else:
-        institute_count = institute_filtered["Institute"].nunique()
-        institute_requests = int(institute_filtered["Requests"].sum())
+        institute_count = cdc_filtered["Institute"].nunique()
+        institute_requests = int(cdc_filtered["Requests"].sum())
         institute_top_device = display_device_name(
-            institute_filtered.sort_values("Requests", ascending=False).iloc[0]["Device"]
+            cdc_filtered.sort_values("Requests", ascending=False).iloc[0]["Device"]
         )
 
         ins_1, ins_2, ins_3 = st.columns(3)
@@ -1415,27 +1394,27 @@ with institutes_tab:
         with ins_3:
             render_insight("Device requests", fmt_number(institute_requests), f"Top device: {institute_top_device}")
 
-        institute_device_counts = institute_filtered.sort_values("Requests", ascending=False).copy()
+        institute_device_counts = cdc_filtered.sort_values("Requests", ascending=False).copy()
         institute_device_counts["Device"] = institute_device_counts["Device"].map(display_device_name)
 
-        st.markdown("#### Institute device demand")
-        chart_height = max(320, min(620, 120 + (len(institute_device_counts) * 34)))
-        st.plotly_chart(
-            make_horizontal_bar(institute_device_counts, "Requests", "Device", height=chart_height),
-            width="stretch",
-        )
+        left, right = st.columns([1.15, 0.85])
+        with left:
+            st.markdown("#### Institute device demand")
+            chart_height = max(320, min(620, 120 + (len(institute_device_counts) * 34)))
+            st.plotly_chart(
+                make_horizontal_bar(institute_device_counts, "Requests", "Device", height=chart_height),
+                width="stretch",
+            )
 
-        st.markdown("#### Institute data")
-        institute_display = (
-            institute_filtered[["Institute", "District", "Device", "Device Category", "Requests"]]
-            .assign(Device=lambda frame: frame["Device"].map(display_device_name))
-            .sort_values(["Institute", "Requests"], ascending=[True, False])
-        )
-        st.dataframe(
-            institute_display,
-            hide_index=True,
-            width="stretch",
-        )
+        with right:
+            st.markdown("#### Institute reference")
+            st.dataframe(
+                cdc_filtered[["Institute", "District", "Device", "Device Category", "Requests"]]
+                .assign(Device=lambda frame: frame["Device"].map(display_device_name))
+                .sort_values("Requests", ascending=False),
+                hide_index=True,
+                width="stretch",
+            )
 
 with profile_tab:
     st.markdown('<div class="section-title">Learner profile</div>', unsafe_allow_html=True)
@@ -1580,3 +1559,11 @@ with data_tab:
     st.markdown('<div class="section-title">Filtered data</div>', unsafe_allow_html=True)
 
     st.dataframe(filtered_df, hide_index=True, width="stretch")
+
+    csv = filtered_df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="Download filtered CSV",
+        data=csv,
+        file_name="filtered_device_data.csv",
+        mime="text/csv",
+    )
