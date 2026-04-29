@@ -1,3 +1,4 @@
+
 from datetime import datetime
 from html import escape
 from pathlib import Path
@@ -1360,12 +1361,6 @@ with bedridden_tab:
             ["Name", "Age", "Gender", "Contact No", "Address", "District", "disability_cleaned", "Device", "Other requirement"]
         ].rename(columns={"disability_cleaned": "Disability"})
         st.dataframe(bedridden_display, hide_index=True, width="stretch")
-        st.download_button(
-            label="Download cleaned bedridden CSV",
-            data=bedridden_display.to_csv(index=False).encode("utf-8"),
-            file_name="cleaned_bedridden_data.csv",
-            mime="text/csv",
-        )
 
 with institutes_tab:
     st.markdown('<div class="section-title">Institutes</div>', unsafe_allow_html=True)
@@ -1559,11 +1554,3 @@ with data_tab:
     st.markdown('<div class="section-title">Filtered data</div>', unsafe_allow_html=True)
 
     st.dataframe(filtered_df, hide_index=True, width="stretch")
-
-    csv = filtered_df.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        label="Download filtered CSV",
-        data=csv,
-        file_name="filtered_device_data.csv",
-        mime="text/csv",
-    )
