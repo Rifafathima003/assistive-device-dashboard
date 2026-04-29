@@ -1,16 +1,14 @@
 # Assistive Device Demand Dashboard
 
-
-## 🚀 Live Dashboard
+## Live Dashboard
 
 [![Open Dashboard](https://img.shields.io/badge/Streamlit-Dashboard-red?logo=streamlit&style=for-the-badge)](https://assistive-device-dashboard-r2syjajgp3broag4y2zea3.streamlit.app/)
-
 
 Streamlit dashboard for reviewing assistive device demand across three live assessment sources:
 
 - school STRIDE form responses
 - bedridden individual assessment responses
-- institute demand summaries from `CDC.txt`
+- institute demand from a published Google Sheet
 
 The app cleans the live sources into request-level rows, combines them for analysis, and supports source-aware filtering across schools, bedridden records, and institutes.
 
@@ -20,7 +18,6 @@ The app cleans the live sources into request-level rows, combines them for analy
 - `clean.py` - cleaning logic for school and bedridden sources
 - `data/cleaned_data.csv` - cleaned school request data
 - `data/cleaned_bedridden_data.csv` - cleaned bedridden request data
-- `data/CDC.txt` - institute demand input
 - `data/DEVICE_INFORMATION_CATALOG_FINAL.xlsx` - device catalog used by the size chart
 - `.streamlit/config.toml` - Streamlit theme configuration
 
@@ -48,17 +45,19 @@ Output:
 
 ### 2. Bedridden assessment sheet
 
-Loaded from the published Google Sheet configured in `clean.py`:
+Loaded from the published Google Sheet configured in `clean.py`.
+
+Current cleaning includes:
 
 - `Primary Medical Condition` -> `Disability`
 - `Preference 1`, `Preference 2`, `Perference 3` -> device request rows
-- district, gender, and device names are normalized using the same dashboard mappings where possible
+- district, gender, and device-name normalization
 
 Output:
 
 - cleaned export in `data/cleaned_bedridden_data.csv`
 
-Exported columns:
+Export columns:
 
 - `Name`
 - `Age`
@@ -72,11 +71,24 @@ Exported columns:
 
 ### 3. Institutes
 
-Institute demand is currently read from:
+Institute demand is loaded from a published Google Sheet configured in `app.py`.
 
-- `data/CDC.txt`
+Current sheet shape:
 
-This is treated as institute-level demand, not person-level assessment data.
+- `Institution`
+- `District`
+- one column per device
+- `Total`
+
+The app reshapes that source into:
+
+- `Institute`
+- `District`
+- `Device`
+- `Device Category`
+- `Requests`
+
+This source is treated as institute-level demand, not person-level assessment data.
 
 ## Dashboard Sections
 
@@ -88,13 +100,12 @@ This is treated as institute-level demand, not person-level assessment data.
 
 - `Institutes`
   - institute device demand
-  - institute reference table
+  - institute data table for viewing
 
 - `Bedridden`
   - bedridden district demand
   - bedridden device demand
-  - cleaned bedridden table
-  - cleaned bedridden CSV download
+  - cleaned bedridden table for viewing
 
 - `Learner profile`
   - disability profile
@@ -106,7 +117,6 @@ This is treated as institute-level demand, not person-level assessment data.
 
 - `Filtered data`
   - current filtered request rows
-  - CSV export
 
 ## Filters and Scope
 
@@ -138,7 +148,8 @@ Notes:
 
 - `Schools` is dependent on selected districts
 - `Population = Combined` uses school + bedridden records in the people views
-- in the current app, institute demand is also included in combined KPI request totals where applicable
+- institute demand is also included in combined KPI request totals where applicable
+- new institutes added to the live institute sheet will appear in the institute filter after manual refresh or hourly refresh
 
 ## KPI Behavior
 
@@ -177,6 +188,36 @@ Bedridden records do not currently provide palm measurements, so they mainly con
 
 - Streamlit auto-refresh: hourly
 - data cache TTL: hourly
+
+## Run Locally
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the dashboard:
+
+```bash
+streamlit run app.py
+```
+
+If port `8501` is already in use:
+
+```bash
+streamlit run app.py --server.port 8502
+```
+
+## Deployment Notes
+
+Keep the device catalog inside the repository at:
+
+```text
+data/DEVICE_INFORMATION_CATALOG_FINAL.xlsx
+```
+
+This is required for hosted deployments such as Streamlit Community Cloud, because local Windows paths are not available there.
 
 ## Dependencies
 
