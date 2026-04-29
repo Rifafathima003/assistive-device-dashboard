@@ -1,4 +1,3 @@
-
 from datetime import datetime
 from html import escape
 from pathlib import Path
@@ -269,6 +268,16 @@ st.markdown(
             color: {COLORS["ink"]} !important;
             -webkit-text-fill-color: {COLORS["ink"]} !important;
             opacity: 1 !important;
+        }}
+
+        [data-testid="stDataFrame"] [data-testid="stElementToolbar"],
+        [data-testid="stDataFrame"] .stElementToolbar,
+        [data-testid="stDataEditor"] [data-testid="stElementToolbar"],
+        [data-testid="stDataEditor"] .stElementToolbar {{
+            display: none !important;
+            visibility: hidden !important;
+            height: 0 !important;
+            min-height: 0 !important;
         }}
 
         [data-testid="stMetric"] {{
