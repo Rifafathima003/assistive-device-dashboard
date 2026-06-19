@@ -574,6 +574,33 @@ def value_counts_frame(df, source_col, label_col, limit=None):
     return counts
 
 
+def unique_people_frame(df):
+    if df.empty:
+        return df.copy()
+
+    people = df.copy()
+    record_type = people.get("Record Type", pd.Series("School", index=people.index)).fillna("School").astype(str)
+    school_id = people.get("School ID", pd.Series(pd.NA, index=people.index)).fillna("").astype(str).str.strip()
+    student_name = people.get("Student Name", pd.Series(pd.NA, index=people.index)).fillna("").astype(str).str.strip()
+    district = people.get("District", pd.Series(pd.NA, index=people.index)).fillna("").astype(str).str.strip()
+    contact_no = people.get("Contact No", pd.Series(pd.NA, index=people.index)).fillna("").astype(str).str.strip()
+
+    school_key = "School|" + school_id + "|" + student_name + "|" + district
+    bedridden_key = "Bedridden|" + contact_no + "|" + student_name + "|" + district
+    fallback_key = record_type + "|" + student_name + "|" + district
+
+    people["_person_key"] = fallback_key
+    people.loc[record_type.eq("School"), "_person_key"] = school_key[record_type.eq("School")]
+    people.loc[record_type.eq("Bedridden"), "_person_key"] = bedridden_key[record_type.eq("Bedridden")]
+    people.loc[people["_person_key"].str.endswith("||"), "_person_key"] = fallback_key[people["_person_key"].str.endswith("||")]
+
+    return people.drop_duplicates("_person_key").drop(columns="_person_key")
+
+
+def unique_people_counts_frame(df, source_col, label_col, limit=None):
+    return value_counts_frame(unique_people_frame(df), source_col, label_col, limit=limit)
+
+
 def normalize_device_name(value):
     device = clean_text(value, "").strip().lower()
     return DEVICE_NAME_MAP.get(device, device)
@@ -1236,12 +1263,13 @@ with metric_4:
 
 st.markdown('<div class="section-title">Executive focus</div>', unsafe_allow_html=True)
 
-gender_counts = value_counts_frame(filtered_df, "Gender", "Gender")
+gender_counts = unique_people_counts_frame(filtered_df, "Gender", "Gender")
 female_count = int(gender_counts.loc[gender_counts["Gender"] == "Female", "Requests"].sum())
 male_count = int(gender_counts.loc[gender_counts["Gender"] == "Male", "Requests"].sum())
 category_counts = value_counts_frame(filtered_df, "Device Category", "Category")
 leading_category = category_counts.iloc[0]["Category"] if not category_counts.empty else "No data"
 leading_category_count = int(category_counts.iloc[0]["Requests"]) if not category_counts.empty else 0
+unique_people_total = len(unique_people_frame(filtered_df))
 district_count = int(filtered_df["District"].value_counts().max()) if total_requests else 0
 
 focus_1, focus_2, focus_3 = st.columns(3)
@@ -1261,7 +1289,7 @@ with focus_3:
     render_insight(
         "Gender distribution",
         f"{fmt_number(male_count)} male / {fmt_number(female_count)} female",
-        f"Female share: {fmt_percent(female_count, total_requests)}.",
+        f"Female share: {fmt_percent(female_count, unique_people_total)}.",
     )
 
 overview_tab, institutes_tab, bedridden_tab, profile_tab, size_tab, data_tab = st.tabs(
@@ -1423,8 +1451,10 @@ with institutes_tab:
 with profile_tab:
     st.markdown('<div class="section-title">Learner profile</div>', unsafe_allow_html=True)
 
-    disability_counts = value_counts_frame(filtered_df, "disability_cleaned", "Disability", top_n)
-    social_counts = value_counts_frame(filtered_df, "Social Category", "Social category", top_n)
+    profile_priority_df = filtered_df[pd.to_numeric(filtered_df["Priority"], errors="coerce") == 1].copy()
+    profile_gender_counts = unique_people_counts_frame(profile_priority_df, "Gender", "Gender")
+    disability_counts = unique_people_counts_frame(profile_priority_df, "disability_cleaned", "Disability", top_n)
+    social_counts = unique_people_counts_frame(profile_priority_df, "Social Category", "Social category", top_n)
 
     left, right = st.columns(2)
     with left:
@@ -1439,7 +1469,7 @@ with profile_tab:
     with left:
         st.markdown("#### Gender distribution")
         fig = px.pie(
-            gender_counts,
+            profile_gender_counts,
             names="Gender",
             values="Requests",
             color="Gender",
