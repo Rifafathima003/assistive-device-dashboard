@@ -21,6 +21,15 @@ REFRESH_INTERVAL_MS = 3600000
 DATA_CACHE_TTL_SECONDS = 3600
 PROJECT_DIR = Path(__file__).resolve().parent
 CDC_PATH = PROJECT_DIR / "data" / "CDC.txt"
+LAST_YEAR_DATA_PATH = PROJECT_DIR / "data" / "last_year_sharepoint.xlsx"
+LAST_YEAR_SHEET_NAME = "ALL 498 CONSOLIDATED NEW"
+LAST_YEAR_DOWNLOAD_URL = (
+    "https://innovationstrategiccouncil-my.sharepoint.com/:x:/g/personal/"
+    "stride_kdisc_kerala_gov_in/IQB5AwKgFLXdQZ3xlHHthLDoAZdXsVA45jLSFXfcC_PAqTw?download=1"
+)
+YEAR_ALL = "All phases"
+YEAR_CURRENT = "Phase 2"
+YEAR_LAST = "Phase 1"
 CATALOG_PATHS = [
     PROJECT_DIR / "data" / "DEVICE_INFORMATION_CATALOG_FINAL.xlsx",
     Path(r"C:\Users\hp\Downloads\DEVICE_INFORMATION_CATALOG_FINAL.xlsx"),
@@ -54,11 +63,13 @@ PRIORITY_COLORS = {
     "2": COLORS["blue"],
     "3": COLORS["blue_light"],
     "Common": COLORS["slate"],
+    "Collected": COLORS["green"],
 }
 CATEGORY_COLORS = {
     "Assistive": COLORS["blue"],
     "Cognitive": COLORS["cyan"],
     "Mobility": COLORS["green"],
+    "Other": COLORS["slate"],
 }
 DEVICE_CATEGORY_MAP = {
     "wheelchair": "Mobility",
@@ -92,6 +103,19 @@ DEVICE_NAME_MAP = {
     "walker": "walking aid",
     "low switch profile": "low profile switch",
     "tooth brush holder": "toothbrush holder",
+    "tooth brush adapter": "toothbrush holder",
+    "toothbrush adapter": "toothbrush holder",
+    "assistive pencil grip": "adaptive pencil grip",
+    "reading bar - curved": "reading bar",
+}
+PHASE_ONE_DEVICE_UNITS = {
+    "adaptive pencil grip": 2,
+    "button aid": 1,
+    "low profile switch": 1,
+    "palm pen holder": 3,
+    "reading bar": 2,
+    "toothbrush holder": 3,
+    "utensil holder": 3,
 }
 
 
@@ -602,12 +626,133 @@ def unique_people_counts_frame(df, source_col, label_col, limit=None):
 
 
 def normalize_device_name(value):
-    device = clean_text(value, "").strip().lower()
+    device = re.sub(r"\s+", " ", clean_text(value, "").strip().lower())
     return DEVICE_NAME_MAP.get(device, device)
 
 
 def display_device_name(value):
     return clean_text(value, "").replace("cdc", "CDC").title()
+
+
+def priority_display_label(value):
+    text = clean_text(value, "").strip()
+    if text == "Common":
+        return "Common requirement"
+    if text == "Collected":
+        return "Collected device"
+    return f"Priority {text}" if text else "Not available"
+
+
+def priority_sort_value(value):
+    text = clean_text(value, "").strip()
+    if text == "Common":
+        return 4
+    if text == "Collected":
+        return 5
+    number = pd.to_numeric(text, errors="coerce")
+    return float(number) if not pd.isna(number) else 99
+
+
+def standardize_district(value):
+    district = clean_text(value, "").split("/")[0].strip().title()
+    district_map = {
+        "Thiruvananthapuram": "Trivandrum",
+        "Tvm": "Trivandrum",
+        "Trivandrum": "Trivandrum",
+        "Kazargod": "Kasaragod",
+    }
+    return district_map.get(district, district)
+
+
+def measurement_to_number(value):
+    return numeric_value(value)
+
+
+def empty_people_columns():
+    return [
+        "District",
+        "School_Name",
+        "School ID",
+        "Student Name",
+        "Gender",
+        "Social Category",
+        "disability_cleaned",
+        "Palm Width Cleaned",
+        "Palm Length Cleaned",
+        "Priority",
+        "Device",
+        "Device Category",
+        "Data Source",
+        "Record Type",
+        "Name",
+        "Age",
+        "Contact No",
+        "Address",
+        "Other requirement",
+        "Collection Year",
+        "Size 1",
+        "Size 2",
+        "Size 3",
+        "Device Units",
+    ]
+
+
+@st.cache_data(ttl=DATA_CACHE_TTL_SECONDS)
+def load_last_year_collected_data(workbook_path, source_url):
+    path = Path(workbook_path)
+    source = path if path.exists() else source_url
+    try:
+        raw = pd.read_excel(source, sheet_name=LAST_YEAR_SHEET_NAME)
+    except Exception:
+        return pd.DataFrame(columns=empty_people_columns())
+
+    raw.columns = raw.columns.astype(str).str.strip()
+    required_columns = {
+        "DISTRICT",
+        "STUDENT_ID",
+        "STUDENT NAME",
+        "DISABILITY",
+        "BUDS SCHOOL",
+        "PREFERENCE",
+    }
+    if not required_columns.issubset(set(raw.columns)):
+        return pd.DataFrame(columns=empty_people_columns())
+
+    cleaned = raw[raw["PREFERENCE"].notna()].copy()
+    cleaned["Device"] = cleaned["PREFERENCE"].map(normalize_device_name)
+    cleaned = cleaned[cleaned["Device"].notna() & cleaned["Device"].ne("")]
+    cleaned["Device Units"] = cleaned["Device"].map(PHASE_ONE_DEVICE_UNITS).fillna(1).astype(int)
+
+    records = pd.DataFrame(
+        {
+            "District": cleaned["DISTRICT"].map(standardize_district),
+            "School_Name": cleaned["BUDS SCHOOL"].map(lambda value: clean_text(value, "").strip().title()),
+            "School ID": cleaned["STUDENT_ID"].map(lambda value: clean_text(value, "").strip()),
+            "Student Name": cleaned["STUDENT NAME"].map(lambda value: clean_text(value, "").strip().title()),
+            "Gender": "Unknown",
+            "Social Category": "Not available",
+            "disability_cleaned": cleaned["DISABILITY"].map(lambda value: clean_text(value, "Other").strip().title()),
+            "Palm Width Cleaned": cleaned.get("WIDTH", pd.Series(pd.NA, index=cleaned.index)).map(measurement_to_number),
+            "Palm Length Cleaned": cleaned.get("LENGTH", pd.Series(pd.NA, index=cleaned.index)).map(measurement_to_number),
+            "Priority": "Collected",
+            "Device": cleaned["Device"],
+            "Device Category": cleaned["Device"].map(lambda device: DEVICE_CATEGORY_MAP.get(device, "Other")),
+            "Data Source": "Last year collected",
+            "Record Type": "School",
+            "Name": cleaned["STUDENT NAME"].map(lambda value: clean_text(value, "").strip().title()),
+            "Age": pd.to_numeric(cleaned.get("AGE", pd.Series(pd.NA, index=cleaned.index)), errors="coerce"),
+            "Contact No": pd.NA,
+            "Address": pd.NA,
+            "Other requirement": pd.NA,
+            "Collection Year": YEAR_LAST,
+            "Size 1": cleaned.get("SIZE1", pd.Series(pd.NA, index=cleaned.index)),
+            "Size 2": cleaned.get("SIZE2", pd.Series(pd.NA, index=cleaned.index)),
+            "Size 3": cleaned.get("SIZE3", pd.Series(pd.NA, index=cleaned.index)),
+            "Device Units": cleaned["Device Units"],
+        }
+    )
+    records = records[records["District"].ne("") & records["Student Name"].ne("")]
+    return records[empty_people_columns()]
 
 
 @st.cache_data(ttl=DATA_CACHE_TTL_SECONDS)
@@ -934,7 +1079,8 @@ def render_slicer(title, options, key, placeholder=None):
     if key not in st.session_state:
         st.session_state[key] = option_list
     else:
-        st.session_state[key] = [item for item in st.session_state[key] if item in option_list]
+        selected_options = [item for item in st.session_state[key] if item in option_list]
+        st.session_state[key] = selected_options if selected_options or not option_list else option_list
 
     with st.sidebar.expander(title, expanded=False):
         return st.multiselect(
@@ -946,23 +1092,37 @@ def render_slicer(title, options, key, placeholder=None):
         )
 
 
-school_df = load_data_streamlit().copy()
-school_df["Data Source"] = "Schools"
-school_df["Record Type"] = "School"
-school_df["Name"] = school_df["Student Name"]
-school_df["Age"] = pd.NA
-school_df["Contact No"] = pd.NA
-school_df["Address"] = pd.NA
-school_df["Other requirement"] = pd.NA
-bedridden_df = load_bedridden_data_streamlit().copy()
-people_df = pd.concat([school_df, bedridden_df], ignore_index=True, sort=False)
+def sorted_column_values(df, column):
+    if df.empty or column not in df.columns:
+        return []
+    return sorted(df[column].dropna().unique(), key=str)
+
+
+current_school_df = load_data_streamlit().copy()
+current_school_df["Data Source"] = "Schools"
+current_school_df["Record Type"] = "School"
+current_school_df["Name"] = current_school_df["Student Name"]
+current_school_df["Age"] = pd.NA
+current_school_df["Contact No"] = pd.NA
+current_school_df["Address"] = pd.NA
+current_school_df["Other requirement"] = pd.NA
+current_school_df["Collection Year"] = YEAR_CURRENT
+current_bedridden_df = load_bedridden_data_streamlit().copy()
+current_bedridden_df["Collection Year"] = YEAR_CURRENT
+last_year_school_df = load_last_year_collected_data(str(LAST_YEAR_DATA_PATH), LAST_YEAR_DOWNLOAD_URL).copy()
+all_school_df = pd.concat([current_school_df, last_year_school_df], ignore_index=True, sort=False)
+all_bedridden_df = current_bedridden_df.copy()
 catalog = load_device_catalog(str(CATALOG_PATH))
-cdc_df = load_cdc_data(str(CDC_PATH))
+current_cdc_df = load_cdc_data(str(CDC_PATH))
+current_cdc_df["Collection Year"] = YEAR_CURRENT
+empty_cdc_df = pd.DataFrame(columns=current_cdc_df.columns)
 
 if "kpi_basis" not in st.session_state:
     st.session_state["kpi_basis"] = "Auto"
 if "analysis_scope" not in st.session_state:
     st.session_state["analysis_scope"] = "Combined"
+if "collection_year" not in st.session_state:
+    st.session_state["collection_year"] = YEAR_ALL
 
 st.sidebar.markdown(
     """
@@ -977,19 +1137,45 @@ if st.sidebar.button("Refresh data"):
 
 st.sidebar.divider()
 
-analysis_scope = st.sidebar.selectbox(
-    "Population",
-    options=["Combined", "Schools", "Bedridden", "Institutes"],
-    key="analysis_scope",
+collection_year = st.sidebar.radio(
+    "Phase",
+    options=[YEAR_ALL, YEAR_CURRENT, YEAR_LAST],
+    key="collection_year",
 )
+phase_one_view = collection_year == YEAR_LAST
 
-with st.sidebar.expander("KPI view", expanded=False):
-    kpi_basis = st.selectbox(
-        "Basis",
-        options=["Auto", "Schools", "Bedridden", "Institutes"],
-        key="kpi_basis",
-        label_visibility="collapsed",
+if collection_year == YEAR_CURRENT:
+    school_df = current_school_df.copy()
+    bedridden_df = current_bedridden_df.copy()
+    cdc_df = current_cdc_df.copy()
+elif collection_year == YEAR_LAST:
+    school_df = last_year_school_df.copy()
+    bedridden_df = current_bedridden_df.iloc[0:0].copy()
+    cdc_df = empty_cdc_df.copy()
+else:
+    school_df = all_school_df.copy()
+    bedridden_df = all_bedridden_df.copy()
+    cdc_df = current_cdc_df.copy()
+
+people_df = pd.concat([school_df, bedridden_df], ignore_index=True, sort=False)
+
+if phase_one_view:
+    analysis_scope = "Combined"
+    kpi_basis = "Auto"
+else:
+    analysis_scope = st.sidebar.selectbox(
+        "Population",
+        options=["Combined", "Schools", "Bedridden", "Institutes"],
+        key="analysis_scope",
     )
+
+    with st.sidebar.expander("KPI view", expanded=False):
+        kpi_basis = st.selectbox(
+            "Basis",
+            options=["Auto", "Schools", "Bedridden", "Institutes"],
+            key="kpi_basis",
+            label_visibility="collapsed",
+        )
 
 source_base_df = {
     "Combined": people_df,
@@ -998,22 +1184,22 @@ source_base_df = {
     "Institutes": cdc_df.rename(columns={"Requests": "Request Count"}),
 }[analysis_scope]
 
-districts = sorted(source_base_df["District"].dropna().unique())
+districts = sorted_column_values(source_base_df, "District")
 selected_districts = render_slicer("Districts", districts, "districts_filter", "Choose districts")
 
 district_scope = source_base_df[source_base_df["District"].isin(selected_districts)] if selected_districts else source_base_df.iloc[0:0]
-schools = sorted(district_scope["School_Name"].dropna().unique()) if analysis_scope in {"Combined", "Schools"} else []
+schools = sorted_column_values(district_scope, "School_Name") if analysis_scope in {"Combined", "Schools"} else []
 current_district_scope = tuple(selected_districts)
 if st.session_state.get("_district_scope") != current_district_scope:
     st.session_state["schools_filter"] = schools
     st.session_state["_district_scope"] = current_district_scope
 selected_schools = (
     render_slicer("Schools", schools, "schools_filter", "Choose schools")
-    if analysis_scope in {"Combined", "Schools"}
+    if analysis_scope in {"Combined", "Schools"} and not phase_one_view
     else []
 )
 
-categories = sorted(source_base_df["Device Category"].dropna().unique())
+categories = sorted_column_values(source_base_df, "Device Category")
 selected_categories = render_slicer(
     "Device categories",
     categories,
@@ -1021,21 +1207,29 @@ selected_categories = render_slicer(
     "Choose categories",
 )
 
-devices = sorted(source_base_df["Device"].dropna().unique())
+devices = sorted_column_values(source_base_df, "Device")
 selected_devices = render_slicer("Devices", devices, "devices_filter", "Choose devices")
 
-institutes = sorted(cdc_df["Institute"].dropna().unique()) if not cdc_df.empty else []
+institutes = sorted_column_values(cdc_df, "Institute")
 selected_institutes = (
     render_slicer("Institutes", institutes, "institutes_filter", "Choose institutes")
-    if institutes
+    if institutes and not phase_one_view
     else []
 )
 
-priorities = sorted(source_base_df["Priority"].dropna().unique(), key=str)
-selected_priorities = render_slicer("Priorities", priorities, "priorities_filter", "Choose priorities")
+priorities = sorted_column_values(source_base_df, "Priority")
+selected_priorities = (
+    render_slicer("Priorities", priorities, "priorities_filter", "Choose priorities")
+    if not phase_one_view
+    else priorities
+)
 
-genders = sorted(source_base_df["Gender"].dropna().unique())
-selected_genders = render_slicer("Genders", genders, "genders_filter", "Choose genders")
+genders = sorted_column_values(source_base_df, "Gender")
+selected_genders = (
+    render_slicer("Genders", genders, "genders_filter", "Choose genders")
+    if not phase_one_view
+    else genders
+)
 
 with st.sidebar.expander("Ranked rows", expanded=False):
     top_n = st.slider("Rows per chart", min_value=5, max_value=20, value=10, step=1)
@@ -1061,6 +1255,7 @@ filtered_df = {
     "Combined": pd.concat([school_filtered_df, bedridden_filtered_df], ignore_index=True, sort=False),
     "Schools": school_filtered_df,
     "Bedridden": bedridden_filtered_df,
+    "Institutes": people_df.iloc[0:0].copy(),
 }[analysis_scope].copy()
 size_chart_df = build_size_chart_data(filtered_df, catalog)
 
@@ -1095,6 +1290,10 @@ institute_districts = int(institute_kpi_df["District"].nunique()) if not institu
 total_schools = filtered_df["School_Name"].dropna().nunique()
 total_districts = filtered_df["District"].nunique()
 total_bedridden_people = filtered_df.loc[filtered_df["Record Type"] == "Bedridden", "Student Name"].dropna().nunique()
+phase_one_records = len(filtered_df) if phase_one_view else 0
+phase_one_units = int(filtered_df.get("Device Units", pd.Series(dtype="int64")).sum()) if phase_one_view else 0
+phase_one_schools = filtered_df["School_Name"].dropna().nunique() if phase_one_view else 0
+phase_one_districts = filtered_df["District"].dropna().nunique() if phase_one_view else 0
 analysis_priority_numeric = pd.to_numeric(filtered_df["Priority"], errors="coerce")
 priority_one = int((analysis_priority_numeric == 1).sum()) if analysis_requests else 0
 school_priority_one = int((pd.to_numeric(school_filtered_df["Priority"], errors="coerce") == 1).sum()) if school_requests else 0
@@ -1144,6 +1343,9 @@ else:
         elif analysis_scope == "Schools":
             scope_count_value = school_filtered_df["School_Name"].dropna().nunique()
             scope_count_label = "schools"
+        elif phase_one_view:
+            scope_count_value = phase_one_schools
+            scope_count_label = "schools"
         else:
             scope_count_value = filtered_df["Student Name"].dropna().nunique()
             scope_count_label = "records"
@@ -1160,9 +1362,20 @@ top_district = (
 )
 latest_refresh = datetime.now().strftime("%d %b %Y, %I:%M %p")
 status_scope_pill = (
+    f'<span class="status-pill">{fmt_number(phase_one_schools)} schools</span>'
+    if phase_one_view
+    else (
     f'<span class="status-pill">{fmt_number(institute_count)} institutes</span>'
     if kpi_basis == "Institutes" or analysis_scope == "Institutes"
     else f'<span class="status-pill">{fmt_number(scope_count_value)} {scope_count_label}</span>'
+    )
+)
+year_scope_pill = f'<span class="status-pill">{safe_html(collection_year)}</span>'
+total_status_label = "device requests" if phase_one_view else "total requests"
+phase_one_units_pill = (
+    f'<span class="status-pill">{fmt_number(phase_one_units)} device units</span>'
+    if phase_one_view
+    else ""
 )
 
 st.markdown(
@@ -1173,7 +1386,9 @@ st.markdown(
             <div class="status-row">
                 <span class="status-pill">Refresh: hourly</span>
                 <span class="status-pill">Updated {safe_html(latest_refresh)}</span>
-                <span class="status-pill">{fmt_number(total_requests)} total requests</span>
+                {year_scope_pill}
+                <span class="status-pill">{fmt_number(total_requests)} {safe_html(total_status_label)}</span>
+                {phase_one_units_pill}
                 {status_scope_pill}
             </div>
         </div>
@@ -1194,7 +1409,13 @@ if (analysis_scope == "Institutes" and cdc_filtered.empty) or (analysis_scope !=
 
 metric_1, metric_2, metric_3, metric_4 = st.columns(4)
 with metric_1:
-    if kpi_basis == "Institutes":
+    if phase_one_view:
+        render_metric(
+            "Device requests",
+            fmt_number(phase_one_records),
+            "Phase 1 students with device requests",
+        )
+    elif kpi_basis == "Institutes":
         render_metric(
             "Device requests",
             fmt_number(total_requests),
@@ -1206,7 +1427,9 @@ with metric_1:
         render_metric("Device requests", fmt_number(total_requests), "Selected school records")
     else:
         device_note = (
-            "Selected school, bedridden, and institute demand"
+            "Selected school, bedridden, institute, and last-year demand"
+            if analysis_scope == "Combined" and collection_year == YEAR_ALL
+            else "Selected school, bedridden, and institute demand"
             if analysis_scope == "Combined"
             else (
                 "Selected school records"
@@ -1216,7 +1439,13 @@ with metric_1:
         )
         render_metric("Device requests", fmt_number(total_requests), device_note)
 with metric_2:
-    if kpi_basis == "Institutes":
+    if phase_one_view:
+        render_metric(
+            "Device units",
+            fmt_number(phase_one_units),
+            "Phase 1 physical device units",
+        )
+    elif kpi_basis == "Institutes":
         render_metric("Institutes covered", fmt_number(institute_count), f"{fmt_number(institute_districts)} districts")
     elif kpi_basis == "Bedridden":
         render_metric("Individuals covered", fmt_number(scope_count_value), f"{fmt_number(total_districts)} districts")
@@ -1225,11 +1454,17 @@ with metric_2:
     elif kpi_basis == "Auto" and analysis_scope == "Bedridden":
         render_metric("Individuals covered", fmt_number(scope_count_value), f"{fmt_number(total_districts)} districts")
     elif kpi_basis == "Auto" and analysis_scope == "Combined":
-        render_metric("Records covered", fmt_number(scope_count_value), f"{fmt_number(total_districts)} districts")
+        render_metric("People covered", fmt_number(scope_count_value), f"{fmt_number(total_districts)} districts")
     else:
         render_metric("Schools covered", fmt_number(total_schools), f"{fmt_number(total_districts)} districts")
 with metric_3:
-    if kpi_basis == "Institutes":
+    if phase_one_view:
+        render_metric(
+            "Schools covered",
+            fmt_number(phase_one_schools),
+            f"{fmt_number(phase_one_districts)} districts",
+        )
+    elif kpi_basis == "Institutes":
         render_metric("Institute districts", fmt_number(institute_districts), "Filtered institute locations")
     elif kpi_basis == "Bedridden":
         render_metric(
@@ -1246,7 +1481,9 @@ with metric_3:
             f"{fmt_percent(priority_value, total_requests)} of selected requests.",
         )
 with metric_4:
-    if kpi_basis == "Institutes":
+    if phase_one_view:
+        render_metric("Most collected device", top_device, "Phase 1 collected records")
+    elif kpi_basis == "Institutes":
         render_metric("Most needed device", top_device, "Institute demand")
     elif kpi_basis == "Bedridden":
         render_metric("Most needed device", top_device, "Bedridden demand")
@@ -1256,7 +1493,9 @@ with metric_4:
         render_metric(
             "Most needed device",
             top_device,
-            "Combined school, bedridden, and institute demand"
+            "Combined current and last-year demand"
+            if analysis_scope == "Combined" and collection_year == YEAR_ALL
+            else "Combined school, bedridden, and institute demand"
             if analysis_scope == "Combined"
             else ("Institute demand" if analysis_scope == "Institutes" else f"{analysis_scope.lower()} demand"),
         )
@@ -1313,12 +1552,10 @@ with overview_tab:
 
     priority_counts = value_counts_frame(filtered_df, "Priority", "Priority")
     priority_counts["Priority"] = priority_counts["Priority"].astype(str)
-    priority_counts["Priority label"] = priority_counts["Priority"].map(
-        lambda value: "Common requirement" if str(value) == "Common" else f"Priority {value}"
-    )
+    priority_counts["Priority label"] = priority_counts["Priority"].map(priority_display_label)
     priority_counts = priority_counts.sort_values(
         "Priority",
-        key=lambda s: s.map(lambda value: 4 if str(value) == "Common" else pd.to_numeric(value, errors="coerce")),
+        key=lambda s: s.map(priority_sort_value),
     )
 
     category_counts = value_counts_frame(filtered_df, "Device Category", "Category")
@@ -1452,9 +1689,19 @@ with profile_tab:
     st.markdown('<div class="section-title">Learner profile</div>', unsafe_allow_html=True)
 
     profile_priority_df = filtered_df[pd.to_numeric(filtered_df["Priority"], errors="coerce") == 1].copy()
-    profile_gender_counts = unique_people_counts_frame(profile_priority_df, "Gender", "Gender")
-    disability_counts = unique_people_counts_frame(profile_priority_df, "disability_cleaned", "Disability", top_n)
-    social_counts = unique_people_counts_frame(profile_priority_df, "Social Category", "Social category", top_n)
+    profile_source_df = profile_priority_df if not profile_priority_df.empty else filtered_df.copy()
+    profile_note = "Priority 1 records" if not profile_priority_df.empty else "Current filters"
+    profile_gender_counts = unique_people_counts_frame(profile_source_df, "Gender", "Gender")
+    disability_counts = unique_people_counts_frame(profile_source_df, "disability_cleaned", "Disability", top_n)
+    social_counts = unique_people_counts_frame(profile_source_df, "Social Category", "Social category", top_n)
+
+    profile_1, profile_2, profile_3 = st.columns(3)
+    with profile_1:
+        render_insight("Profile base", fmt_number(len(unique_people_frame(profile_source_df))), profile_note)
+    with profile_2:
+        render_insight("Districts", fmt_number(profile_source_df["District"].nunique()), "Current filters")
+    with profile_3:
+        render_insight("Schools", fmt_number(profile_source_df["School_Name"].dropna().nunique()), "Current filters")
 
     left, right = st.columns(2)
     with left:
