@@ -400,10 +400,13 @@ st.markdown(
 
         .metric-value {{
             color: #ffffff;
-            font-size: 2rem;
+            font-size: clamp(1.45rem, 2.4vw, 2rem);
             font-weight: 850;
             line-height: 1.1;
             margin-top: 0.55rem;
+            overflow-wrap: normal;
+            white-space: normal;
+            word-break: normal;
         }}
 
         .metric-note {{
@@ -1143,6 +1146,7 @@ collection_year = st.sidebar.radio(
     key="collection_year",
 )
 phase_one_view = collection_year == YEAR_LAST
+phase_scope_changed = st.session_state.get("_phase_filter_scope") != collection_year
 
 if collection_year == YEAR_CURRENT:
     school_df = current_school_df.copy()
@@ -1185,6 +1189,18 @@ source_base_df = {
 }[analysis_scope]
 
 districts = sorted_column_values(source_base_df, "District")
+if phase_scope_changed:
+    for filter_key in [
+        "districts_filter",
+        "schools_filter",
+        "categories_filter",
+        "devices_filter",
+        "institutes_filter",
+        "priorities_filter",
+        "genders_filter",
+    ]:
+        st.session_state.pop(filter_key, None)
+    st.session_state["_phase_filter_scope"] = collection_year
 selected_districts = render_slicer("Districts", districts, "districts_filter", "Choose districts")
 
 district_scope = source_base_df[source_base_df["District"].isin(selected_districts)] if selected_districts else source_base_df.iloc[0:0]
@@ -1271,6 +1287,15 @@ cdc_requests = int(cdc_filtered["Requests"].sum()) if not cdc_filtered.empty els
 school_requests = len(school_filtered_df)
 bedridden_requests = len(bedridden_filtered_df)
 analysis_requests = len(filtered_df)
+analysis_phase_one_units = int(
+    filtered_df.loc[filtered_df["Collection Year"].eq(YEAR_LAST), "Device Units"]
+    .fillna(0)
+    .sum()
+) if "Device Units" in filtered_df.columns and "Collection Year" in filtered_df.columns else 0
+analysis_phase_one_request_rows = int(
+    filtered_df["Collection Year"].eq(YEAR_LAST).sum()
+) if "Collection Year" in filtered_df.columns else 0
+analysis_request_units = analysis_requests - analysis_phase_one_request_rows + analysis_phase_one_units
 
 analysis_device_counts = filtered_df["Device"].value_counts() if not filtered_df.empty else pd.Series(dtype="int64")
 school_device_counts = school_filtered_df["Device"].value_counts() if not school_filtered_df.empty else pd.Series(dtype="int64")
@@ -1335,6 +1360,8 @@ else:
         scope_count_label = "institutes"
     else:
         total_requests = analysis_requests + (institute_requests if analysis_scope == "Combined" else 0)
+        if collection_year == YEAR_ALL and analysis_scope == "Combined":
+            total_requests = analysis_request_units + institute_requests
         active_device_counts = combined_device_counts if analysis_scope == "Combined" else analysis_device_counts
         top_device = display_device_name(active_device_counts.idxmax()) if not active_device_counts.empty else "No data"
         if analysis_scope == "Bedridden":
@@ -1361,38 +1388,31 @@ top_district = (
     )
 )
 latest_refresh = datetime.now().strftime("%d %b %Y, %I:%M %p")
-status_scope_pill = (
-    f'<span class="status-pill">{fmt_number(phase_one_schools)} schools</span>'
-    if phase_one_view
-    else (
-    f'<span class="status-pill">{fmt_number(institute_count)} institutes</span>'
-    if kpi_basis == "Institutes" or analysis_scope == "Institutes"
-    else f'<span class="status-pill">{fmt_number(scope_count_value)} {scope_count_label}</span>'
-    )
-)
-year_scope_pill = f'<span class="status-pill">{safe_html(collection_year)}</span>'
+if phase_one_view:
+    status_scope_pill = f'<span class="status-pill">{fmt_number(phase_one_schools)} schools</span>'
+elif kpi_basis == "Institutes" or analysis_scope == "Institutes":
+    status_scope_pill = f'<span class="status-pill">{fmt_number(institute_count)} institutes</span>'
+else:
+    status_scope_pill = f'<span class="status-pill">{fmt_number(scope_count_value)} {scope_count_label}</span>'
 total_status_label = "device requests" if phase_one_view else "total requests"
-phase_one_units_pill = (
-    f'<span class="status-pill">{fmt_number(phase_one_units)} device units</span>'
-    if phase_one_view
-    else ""
-)
+status_pills = [
+    '<span class="status-pill">Refresh: hourly</span>',
+    f'<span class="status-pill">Updated {safe_html(latest_refresh)}</span>',
+    f'<span class="status-pill">{safe_html(collection_year)}</span>',
+    f'<span class="status-pill">{fmt_number(total_requests)} {safe_html(total_status_label)}</span>',
+]
+if phase_one_view:
+    status_pills.append(f'<span class="status-pill">{fmt_number(phase_one_units)} device units</span>')
+status_pills.append(status_scope_pill)
 
 st.markdown(
-    f"""
-        <div class="app-hero">
-            <div class="eyebrow">Assistive device dashboard</div>
-            <h1 class="hero-title">Assistive Device Demand Dashboard</h1>
-            <div class="status-row">
-                <span class="status-pill">Refresh: hourly</span>
-                <span class="status-pill">Updated {safe_html(latest_refresh)}</span>
-                {year_scope_pill}
-                <span class="status-pill">{fmt_number(total_requests)} {safe_html(total_status_label)}</span>
-                {phase_one_units_pill}
-                {status_scope_pill}
-            </div>
-        </div>
-    """,
+    (
+        '<div class="app-hero">'
+        '<div class="eyebrow">Assistive device dashboard</div>'
+        '<h1 class="hero-title">Assistive Device Demand Dashboard</h1>'
+        f'<div class="status-row">{"".join(status_pills)}</div>'
+        '</div>'
+    ),
     unsafe_allow_html=True,
 )
 
@@ -1427,7 +1447,7 @@ with metric_1:
         render_metric("Device requests", fmt_number(total_requests), "Selected school records")
     else:
         device_note = (
-            "Selected school, bedridden, institute, and last-year demand"
+            "Selected Phase 2 requests plus Phase 1 device units"
             if analysis_scope == "Combined" and collection_year == YEAR_ALL
             else "Selected school, bedridden, and institute demand"
             if analysis_scope == "Combined"
